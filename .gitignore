@@ -1,0 +1,18 @@
+# Office lock files
+.~lock.*#
+~$*
+
+# Temp files
+*.tmp
+
+# Local Claude settings
+.claude/
+
+# Internal project material — not part of the online demo
+# (only the demo site in docs/ and the README are tracked)
+/*.md
+!/README.md
+*.docx
+*.pdf
+*.pptx
+*.xlsx

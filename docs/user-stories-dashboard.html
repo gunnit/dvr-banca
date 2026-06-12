@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIUEXA — N2O DVR Banca ESG-Social | Dashboard Storie Utente</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+ --niuexa-cyan:#06b6d4; --niuexa-teal:#14b8a6; --niuexa-green:#10b981;
+ --niuexa-navy:#0f172a; --niuexa-blue:#2563eb; --niuexa-purple:#8b5cf6;
+ --niuexa-white:#ffffff; --niuexa-off-white:#f8fafc;
+ --niuexa-light-gray:#e2e8f0; --niuexa-mid-gray:#64748b;
+ --niuexa-dark-gray:#334155; --niuexa-slate-800:#1e293b;
+ --font-h:'Poppins',sans-serif; --font-b:'Inter',sans-serif; --font-m:'JetBrains Mono',monospace;
+ --gradient-logo:linear-gradient(180deg,#06b6d4,#10b981);
+ --gradient-tech:linear-gradient(135deg,#2563eb,#06b6d4);
+ --gradient-dark:linear-gradient(180deg,#0f172a,#1e293b);
+ --gradient-ai:linear-gradient(135deg,#2563eb,#8b5cf6);
+ --shadow-glow:0 4px 24px rgba(6,182,212,0.15);
+ --radius-md:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-b);color:var(--niuexa-dark-gray);line-height:1.6;background:var(--niuexa-white);-webkit-font-smoothing:antialiased}
+.container{max-width:1280px;margin:0 auto;padding:0 48px}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(15,23,42,0.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(6,182,212,0.15)}
+.nav-left{display:flex;align-items:center;gap:16px}
+.nav img{height:36px;width:auto}
+.nav-title{color:#fff;font-family:var(--font-h);font-weight:600;font-size:15px;letter-spacing:0.02em}
+.nav-title span{color:var(--niuexa-cyan)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--niuexa-cyan)}
+
+/* Hero */
+.hero{background:var(--gradient-dark);padding:80px 48px 60px;position:relative;overflow:hidden;color:#fff}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:800px;height:800px;background:radial-gradient(circle,rgba(6,182,212,0.10),transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-300px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,0.07),transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:1280px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border:1px solid rgba(6,182,212,0.3);border-radius:999px;font-size:12px;font-weight:500;color:var(--niuexa-cyan);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:24px;background:rgba(6,182,212,0.05)}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--niuexa-cyan);box-shadow:0 0 8px var(--niuexa-cyan)}
+.hero h1{font-family:var(--font-h);font-size:48px;font-weight:800;color:#fff;letter-spacing:-0.02em;line-height:1.1;margin-bottom:18px;max-width:900px}
+.hero h1 span{background:var(--gradient-logo);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:18px;color:rgba(255,255,255,0.65);max-width:720px;margin-bottom:36px}
+.hero-meta{display:flex;gap:32px;font-size:13px;color:rgba(255,255,255,0.5);font-family:var(--font-m)}
+.hero-meta span{display:flex;align-items:center;gap:8px}
+.hero-meta span::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--niuexa-cyan)}
+
+/* Stats row */
+.stats-section{background:var(--niuexa-off-white);padding:56px 48px;border-bottom:1px solid var(--niuexa-light-gray)}
+.stats-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.stat-card{background:#fff;border:1px solid var(--niuexa-light-gray);border-radius:var(--radius-md);padding:28px 22px;text-align:center;position:relative;overflow:hidden;transition:all 0.3s}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-logo)}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-glow);border-color:rgba(6,182,212,0.3)}
+.stat-num{font-family:var(--font-h);font-size:42px;font-weight:800;color:var(--niuexa-cyan);letter-spacing:-0.03em;line-height:1}
+.stat-num.green{color:var(--niuexa-green)}
+.stat-num.purple{color:var(--niuexa-purple)}
+.stat-num.blue{color:var(--niuexa-blue)}
+.stat-num.teal{color:var(--niuexa-teal)}
+.stat-label{font-size:11px;font-weight:600;color:var(--niuexa-mid-gray);text-transform:uppercase;letter-spacing:0.06em;margin-top:8px}
+
+/* Section */
+section.block{padding:72px 48px}
+section.block.alt{background:var(--niuexa-off-white)}
+section.block.dark{background:var(--gradient-dark);color:#fff}
+.sect-head{max-width:1280px;margin:0 auto 44px}
+.sect-eyebrow{display:inline-block;font-size:12px;font-weight:600;color:var(--niuexa-cyan);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;font-family:var(--font-m)}
+.sect-head h2{font-family:var(--font-h);font-size:34px;font-weight:700;color:var(--niuexa-navy);letter-spacing:-0.01em;margin-bottom:10px}
+section.block.dark .sect-head h2{color:#fff}
+.sect-head p{font-size:16px;color:var(--niuexa-mid-gray);max-width:720px}
+section.block.dark .sect-head p{color:rgba(255,255,255,0.65)}
+.divider-bar{width:60px;height:4px;background:var(--gradient-logo);border-radius:2px;margin-bottom:18px}
+
+/* Personas */
+.personas-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.persona{background:#fff;border:1px solid var(--niuexa-light-gray);border-radius:var(--radius-md);padding:28px;position:relative;overflow:hidden;transition:all 0.3s}
+.persona::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity 0.3s}
+.persona:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(6,182,212,0.08);border-color:rgba(6,182,212,0.3)}
+.persona:hover::before{opacity:1}
+.persona.p-niuexa::before{background:var(--gradient-ai)}
+.persona.p-banca::before{background:var(--gradient-tech)}
+.persona.p-corp::before{background:var(--gradient-logo)}
+.persona.p-cons::before{background:linear-gradient(135deg,#10b981,#14b8a6)}
+.persona-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:800;font-size:18px;color:#fff;margin-bottom:18px;letter-spacing:-0.02em}
+.persona.p-niuexa .persona-icon{background:var(--gradient-ai)}
+.persona.p-banca .persona-icon{background:var(--gradient-tech)}
+.persona.p-corp .persona-icon{background:var(--gradient-logo)}
+.persona.p-cons .persona-icon{background:linear-gradient(135deg,#10b981,#14b8a6)}
+.persona h3{font-family:var(--font-h);font-size:17px;font-weight:600;color:var(--niuexa-navy);margin-bottom:6px}
+.persona-role{font-size:12px;color:var(--niuexa-mid-gray);font-family:var(--font-m);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px}
+.persona-desc{font-size:14px;color:var(--niuexa-dark-gray);line-height:1.55}
+.persona-stories{margin-top:16px;padding-top:14px;border-top:1px solid var(--niuexa-light-gray);font-size:12px;color:var(--niuexa-mid-gray)}
+.persona-stories b{color:var(--niuexa-cyan);font-weight:600}
+
+/* Epic cards */
+.epics-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.epic-card{background:#fff;border:1px solid var(--niuexa-light-gray);border-radius:var(--radius-md);padding:28px;cursor:pointer;position:relative;overflow:hidden;transition:all 0.3s}
+.epic-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gradient-logo);transform:scaleY(0.4);transform-origin:top;transition:transform 0.3s}
+.epic-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(6,182,212,0.10);border-color:rgba(6,182,212,0.3)}
+.epic-card:hover::before{transform:scaleY(1)}
+.epic-card.active{border-color:var(--niuexa-cyan);box-shadow:var(--shadow-glow)}
+.epic-card.active::before{transform:scaleY(1)}
+.epic-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.epic-id{font-family:var(--font-m);font-size:12px;font-weight:500;color:var(--niuexa-cyan);background:rgba(6,182,212,0.08);padding:4px 10px;border-radius:6px;letter-spacing:0.04em}
+.epic-count{font-family:var(--font-h);font-size:32px;font-weight:800;color:var(--niuexa-navy);line-height:1;letter-spacing:-0.03em}
+.epic-count small{font-size:13px;font-weight:500;color:var(--niuexa-mid-gray);margin-left:4px;letter-spacing:0}
+.epic-card h3{font-family:var(--font-h);font-size:18px;font-weight:600;color:var(--niuexa-navy);margin-bottom:8px;letter-spacing:-0.01em}
+.epic-card p{font-size:14px;color:var(--niuexa-mid-gray);line-height:1.55;margin-bottom:14px}
+.epic-tags{display:flex;flex-wrap:wrap;gap:6px}
+.epic-tag{font-size:11px;font-weight:500;color:var(--niuexa-dark-gray);background:var(--niuexa-off-white);border:1px solid var(--niuexa-light-gray);padding:3px 10px;border-radius:999px;letter-spacing:0.02em}
+
+/* Stories explorer */
+.explorer{max-width:1280px;margin:0 auto}
+.toolbar{background:#fff;border:1px solid var(--niuexa-light-gray);border-radius:var(--radius-md);padding:18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:24px}
+.search-input{flex:1;min-width:220px;border:1px solid var(--niuexa-light-gray);border-radius:8px;padding:10px 14px;font-family:var(--font-b);font-size:14px;color:var(--niuexa-dark-gray);background:var(--niuexa-off-white);transition:all 0.2s}
+.search-input:focus{outline:none;border-color:var(--niuexa-cyan);background:#fff;box-shadow:0 0 0 3px rgba(6,182,212,0.12)}
+.filter-chip{font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;border:1px solid var(--niuexa-light-gray);background:#fff;color:var(--niuexa-dark-gray);cursor:pointer;transition:all 0.2s;font-family:var(--font-b);white-space:nowrap}
+.filter-chip:hover{border-color:var(--niuexa-cyan);color:var(--niuexa-cyan)}
+.filter-chip.active{background:var(--gradient-logo);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(6,182,212,0.25)}
+.results-count{font-size:13px;color:var(--niuexa-mid-gray);margin-left:auto;font-family:var(--font-m)}
+.results-count b{color:var(--niuexa-navy);font-weight:600}
+
+.stories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.story{background:#fff;border:1px solid var(--niuexa-light-gray);border-radius:var(--radius-md);padding:24px;cursor:pointer;position:relative;overflow:hidden;transition:all 0.25s}
+.story::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient-logo);opacity:0;transition:opacity 0.25s}
+.story:hover{transform:translateY(-2px);border-color:rgba(6,182,212,0.4);box-shadow:0 6px 24px rgba(6,182,212,0.10)}
+.story:hover::before{opacity:1}
+.story-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.story-id{font-family:var(--font-m);font-size:11px;font-weight:600;color:var(--niuexa-cyan);background:rgba(6,182,212,0.08);padding:3px 9px;border-radius:5px;letter-spacing:0.04em}
+.story-persona{font-size:11px;font-weight:500;color:var(--niuexa-dark-gray);background:var(--niuexa-off-white);border:1px solid var(--niuexa-light-gray);padding:3px 9px;border-radius:5px;letter-spacing:0.02em}
+.story-persona.niuexa{color:var(--niuexa-purple);background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.2)}
+.story-persona.banca{color:var(--niuexa-blue);background:rgba(37,99,235,0.08);border-color:rgba(37,99,235,0.2)}
+.story-persona.corp{color:var(--niuexa-teal);background:rgba(20,184,166,0.08);border-color:rgba(20,184,166,0.2)}
+.story-persona.eng{color:var(--niuexa-green);background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2)}
+.story h4{font-family:var(--font-h);font-size:15px;font-weight:600;color:var(--niuexa-navy);margin-bottom:10px;line-height:1.35;letter-spacing:-0.005em}
+.story-want{font-size:13px;color:var(--niuexa-dark-gray);line-height:1.55;margin-bottom:14px}
+.story-want i{color:var(--niuexa-cyan);font-style:normal;font-weight:600}
+.story-footer{display:flex;align-items:center;gap:14px;padding-top:12px;border-top:1px solid var(--niuexa-light-gray);font-size:11px;color:var(--niuexa-mid-gray);font-family:var(--font-m)}
+.story-footer span{display:flex;align-items:center;gap:5px}
+.story-footer span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--niuexa-teal)}
+.story-footer span.test::before{background:var(--niuexa-purple)}
+.story-footer span.indicator::before{background:var(--niuexa-green)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,0.7);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:60px 24px;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:880px;width:100%;padding:0;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.4);position:relative}
+.modal-head{padding:32px 36px 24px;background:var(--gradient-dark);color:#fff;position:relative;overflow:hidden}
+.modal-head::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(6,182,212,0.15),transparent 70%);pointer-events:none}
+.modal-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;z-index:2;transition:all 0.2s}
+.modal-close:hover{background:rgba(6,182,212,0.3);border-color:var(--niuexa-cyan)}
+.modal-id{font-family:var(--font-m);font-size:12px;font-weight:600;color:var(--niuexa-cyan);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
+.modal-head h3{font-family:var(--font-h);font-size:24px;font-weight:700;color:#fff;line-height:1.25;letter-spacing:-0.01em;position:relative;z-index:1;max-width:90%}
+.modal-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
+.modal-meta-chip{font-size:11px;font-weight:500;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.15);padding:5px 12px;border-radius:999px;letter-spacing:0.02em}
+.modal-body{padding:28px 36px 36px;max-height:60vh;overflow-y:auto}
+.modal-section{margin-bottom:24px}
+.modal-section:last-child{margin-bottom:0}
+.modal-section h4{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--niuexa-cyan);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.modal-section h4::before{content:'';width:4px;height:14px;background:var(--gradient-logo);border-radius:2px}
+.story-block{background:var(--niuexa-off-white);border-left:3px solid var(--niuexa-cyan);border-radius:0 8px 8px 0;padding:16px 20px;font-size:14px;line-height:1.7}
+.story-block b{color:var(--niuexa-cyan);font-weight:600}
+.ac-list{display:flex;flex-direction:column;gap:10px}
+.ac-item{display:flex;gap:14px;font-size:13px;line-height:1.6;color:var(--niuexa-dark-gray);padding:12px 14px;background:var(--niuexa-off-white);border-radius:8px;border:1px solid var(--niuexa-light-gray)}
+.ac-num{font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--niuexa-cyan);background:#fff;border:1px solid rgba(6,182,212,0.3);padding:2px 8px;border-radius:4px;height:fit-content;white-space:nowrap}
+.ac-item strong{color:var(--niuexa-navy);font-weight:600}
+.dod-list{display:flex;flex-direction:column;gap:8px}
+.dod-item{font-size:13px;line-height:1.55;color:var(--niuexa-dark-gray);padding-left:20px;position:relative}
+.dod-item::before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--gradient-logo)}
+.dod-item code{font-family:var(--font-m);font-size:12px;background:rgba(15,23,42,0.05);padding:2px 6px;border-radius:4px;color:var(--niuexa-navy)}
+
+/* Coverage matrix */
+.matrix-wrap{max-width:1280px;margin:0 auto;background:#fff;border:1px solid var(--niuexa-light-gray);border-radius:var(--radius-md);padding:32px;overflow-x:auto}
+table.matrix{width:100%;border-collapse:collapse;font-size:13px;min-width:680px}
+table.matrix th{font-family:var(--font-h);font-size:12px;font-weight:600;color:var(--niuexa-mid-gray);text-transform:uppercase;letter-spacing:0.06em;text-align:left;padding:14px 16px;border-bottom:2px solid var(--niuexa-light-gray)}
+table.matrix th.num{text-align:center}
+table.matrix td{padding:16px;border-bottom:1px solid var(--niuexa-light-gray);vertical-align:middle}
+table.matrix td.epic{font-family:var(--font-m);font-size:12px;font-weight:600;color:var(--niuexa-cyan);width:60px}
+table.matrix td.title{font-weight:500;color:var(--niuexa-navy);font-size:14px}
+table.matrix td.count{text-align:center;font-family:var(--font-h);font-size:20px;font-weight:700;color:var(--niuexa-navy);width:90px}
+table.matrix td.coverage{color:var(--niuexa-dark-gray);font-size:13px;line-height:1.5}
+table.matrix tr.total{background:var(--niuexa-off-white);font-weight:600}
+table.matrix tr.total td{padding:18px 16px;border-top:2px solid var(--niuexa-cyan);border-bottom:none}
+table.matrix tr.total td.count{color:var(--niuexa-cyan);font-size:26px}
+table.matrix tr.total td.coverage{color:var(--niuexa-navy);font-weight:600}
+
+/* MEF indicators bar */
+.indicator-bar{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.indicator-chip{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:24px;padding:0 8px;background:rgba(6,182,212,0.08);color:var(--niuexa-cyan);border:1px solid rgba(6,182,212,0.2);border-radius:5px;font-family:var(--font-m);font-size:11px;font-weight:600}
+
+/* Backlog */
+.backlog-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.backlog-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:20px;color:#fff;transition:all 0.25s}
+.backlog-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(6,182,212,0.3);transform:translateY(-2px)}
+.backlog-id{font-family:var(--font-m);font-size:11px;font-weight:600;color:var(--niuexa-cyan);letter-spacing:0.04em;margin-bottom:8px}
+.backlog-card p{font-size:14px;color:rgba(255,255,255,0.85);line-height:1.5}
+
+/* Footer */
+.footer{background:var(--niuexa-navy);border-top:1px solid rgba(255,255,255,0.06);padding:36px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-left{display:flex;align-items:center;gap:14px}
+.footer img{height:28px;width:auto;filter:brightness(0) invert(1);opacity:0.7}
+.footer-text{font-size:12px;color:var(--niuexa-mid-gray);font-family:var(--font-m);letter-spacing:0.03em}
+.footer-right{font-size:12px;color:var(--niuexa-mid-gray);font-family:var(--font-m)}
+
+/* Responsive */
+@media (max-width:1024px){
+ .stats-grid{grid-template-columns:repeat(3,1fr)}
+ .personas-grid{grid-template-columns:repeat(2,1fr)}
+ .epics-grid{grid-template-columns:1fr}
+ .stories-grid{grid-template-columns:1fr}
+ .backlog-grid{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+ .container,.nav,section.block,.stats-section,.hero{padding-left:20px;padding-right:20px}
+ .nav-links{display:none}
+ .hero h1{font-size:32px}
+ .stats-grid{grid-template-columns:repeat(2,1fr)}
+ .personas-grid{grid-template-columns:1fr}
+ .footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+ <div class="nav-left">
+  <img src="data:image/png;base64,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" alt="NIUEXA" />
+  <div class="nav-title">NIUEXA <span>·</span> N2O DVR Banca ESG-Social</div>
+ </div>
+ <div class="nav-links">
+  <a href="#personas">Personas</a>
+  <a href="#epics">Epic</a>
+  <a href="#stories">Storie</a>
+  <a href="#matrix">Copertura</a>
+  <a href="#backlog">Backlog</a>
+ </div>
+</nav>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="hero-eyebrow">Storie Utente · Versione 1.0</div>
+  <h1>30 storie utente al cuore dell'add-on <span>Banca ESG-Social</span></h1>
+  <p class="hero-sub">Backlog testabile guidato dalle personas: onboarding del tenant banca, portale PMI white-label, autodichiarazione MEF Sezione 4, dashboard banker, evidenze di compliance, upsell Tier-2, e sicurezza multi-tenant &amp; GDPR cross-cutting.</p>
+  <div class="hero-meta">
+   <span>Versione 1.0 — Maggio 2026</span>
+   <span>Gregor Maric</span>
+   <span>Confidenziale — Niuexa &amp; N2O SRL</span>
+  </div>
+ </div>
+</header>
+
+<section class="stats-section">
+ <div class="stats-grid">
+  <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Epic nell'MVP</div></div>
+  <div class="stat-card"><div class="stat-num green">30</div><div class="stat-label">Storie Utente</div></div>
+  <div class="stat-card"><div class="stat-num purple">4</div><div class="stat-label">Personas</div></div>
+  <div class="stat-card"><div class="stat-num blue">12</div><div class="stat-label">Indicatori MEF</div></div>
+  <div class="stat-card"><div class="stat-num teal">100%</div><div class="stat-label">Storie con Test</div></div>
+  <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Voci nel Backlog</div></div>
+ </div>
+</section>
+
+<section class="block" id="personas">
+ <div class="sect-head">
+  <div class="divider-bar"></div>
+  <div class="sect-eyebrow">Sezione 01</div>
+  <h2>Personas</h2>
+  <p>Quattro ruoli che attraversano la catena del valore banca-PMI. Ogni storia è ancorata a una di queste personas.</p>
+ </div>
+ <div class="personas-grid">
+  <div class="persona p-niuexa">
+   <div class="persona-icon">N2O</div>
+   <h3>N2O Compliance Officer</h3>
+   <div class="persona-role">Interno · Admin cross-banca</div>
+   <p class="persona-desc">Effettua l'onboarding dei nuovi tenant banca, configura il branding, esegue import dei portafogli, gestisce DPA, supervisiona il ledger di revenue-share fra banche.</p>
+   <div class="persona-stories"><b>11</b> storie · copre B1, B5, B6.3, B7.2</div>
+  </div>
+  <div class="persona p-banca">
+   <div class="persona-icon">BA</div>
+   <h3>Banca Admin</h3>
+   <div class="persona-role">Compliance/IT della banca partner</div>
+   <p class="persona-desc">Lancia campagne di invito, monitora la copertura del portafoglio, approfondisce il rischio cliente, esporta pacchetti SREP/ispezione, gestisce gli accessi dello staff bancario.</p>
+   <div class="persona-stories"><b>9</b> storie · copre B2.1–B2.2, B4, B5.2, B7.4</div>
+  </div>
+  <div class="persona p-corp">
+   <div class="persona-icon">DDL</div>
+   <h3>Corporate DdL</h3>
+   <div class="persona-role">Datore di Lavoro · Cliente PMI</div>
+   <p class="persona-desc">Accetta l'invito, completa il wizard di autodichiarazione, firma il PDF PADES, scarica la propria copia, valuta l'upgrade opzionale a DVR Pro Tier 2.</p>
+   <div class="persona-stories"><b>9</b> storie · copre B2.3–B2.4, B3 (tutte e 7), B5.3, B6.1–B6.2</div>
+  </div>
+  <div class="persona p-cons">
+   <div class="persona-icon">ENG</div>
+   <h3>Niuexa Engineer</h3>
+   <div class="persona-role">Piattaforma / Sicurezza</div>
+   <p class="persona-desc">Garantisce isolamento multi-tenant, rate-limiting e verifica di integrità — le tematiche cross-cutting che rendono il B2B sicuro su larga scala.</p>
+   <div class="persona-stories"><b>2</b> storie · copre B7.1, B7.3</div>
+  </div>
+ </div>
+</section>
+
+<section class="block alt" id="epics">
+ <div class="sect-head">
+  <div class="divider-bar"></div>
+  <div class="sect-eyebrow">Sezione 02</div>
+  <h2>Panoramica degli epic</h2>
+  <p>Clicca un epic per filtrare l'esploratore di storie qui sotto. Ogni epic rilascia uno slice end-to-end con test E2E (Playwright) e unit (pytest) come Definition of Done.</p>
+ </div>
+ <div class="epics-grid" id="epics-grid"></div>
+</section>
+
+<section class="block" id="stories">
+ <div class="sect-head">
+  <div class="divider-bar"></div>
+  <div class="sect-eyebrow">Sezione 03</div>
+  <h2>Esploratore di storie</h2>
+  <p>Filtra per epic o persona, cerca per ID o parola chiave, clicca una card per espandere criteri di accettazione e Definition of Done.</p>
+ </div>
+ <div class="explorer">
+  <div class="toolbar">
+   <input type="text" class="search-input" id="search" placeholder="Cerca per ID, titolo o parola chiave…" />
+   <button class="filter-chip active" data-filter="all">Tutti gli epic</button>
+   <button class="filter-chip" data-filter="B1">B1</button>
+   <button class="filter-chip" data-filter="B2">B2</button>
+   <button class="filter-chip" data-filter="B3">B3</button>
+   <button class="filter-chip" data-filter="B4">B4</button>
+   <button class="filter-chip" data-filter="B5">B5</button>
+   <button class="filter-chip" data-filter="B6">B6</button>
+   <button class="filter-chip" data-filter="B7">B7</button>
+   <span class="results-count"><b id="rc">30</b> / 30 storie</span>
+  </div>
+  <div class="stories-grid" id="stories-grid"></div>
+ </div>
+</section>
+
+<section class="block alt" id="matrix">
+ <div class="sect-head">
+  <div class="divider-bar"></div>
+  <div class="sect-eyebrow">Sezione 04</div>
+  <h2>Matrice di copertura</h2>
+  <p>Lo scope MVP copre tutti gli indicatori MEF Sezione 4 di Priorità 1, più i principali indicatori cross-settore (ISO 45001, codice etico, designazione RSPP/RLS, copertura CCNL).</p>
+ </div>
+ <div class="matrix-wrap">
+  <table class="matrix">
+   <thead>
+    <tr>
+     <th>Epic</th>
+     <th>Titolo</th>
+     <th class="num">Storie</th>
+     <th>Copertura indicatori MEF</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td class="epic">B1</td>
+     <td class="title">Onboarding banca &amp; setup white-label</td>
+     <td class="count">4</td>
+     <td class="coverage">Fondamentale — tenant, branding, import clienti, provisioning admin.</td>
+    </tr>
+    <tr>
+     <td class="epic">B2</td>
+     <td class="title">Onboarding cliente corporate (flusso di invito)</td>
+     <td class="count">4</td>
+     <td class="coverage">Auth magic-link, solleciti, codici di backup — accesso PMI senza attriti.</td>
+    </tr>
+    <tr>
+     <td class="epic">B3</td>
+     <td class="title">Compilazione autodichiarazione (Tier 1, free)</td>
+     <td class="count">7</td>
+     <td class="coverage">
+      <div>Indicatori catturati:</div>
+      <div class="indicator-bar">
+       <span class="indicator-chip">26</span><span class="indicator-chip">28</span><span class="indicator-chip">29</span><span class="indicator-chip">31</span><span class="indicator-chip">32</span><span class="indicator-chip">33</span><span class="indicator-chip">34</span><span class="indicator-chip">35</span><span class="indicator-chip">36</span><span class="indicator-chip">39</span><span class="indicator-chip">ISO 45001</span><span class="indicator-chip">Codice etico</span>
+      </div>
+     </td>
+    </tr>
+    <tr>
+     <td class="epic">B4</td>
+     <td class="title">Dashboard Banca Admin</td>
+     <td class="count">5</td>
+     <td class="coverage">Report su tutti i 12 indicatori — copertura portafoglio, drill-down, heatmap, export SREP CSV/XLSX, RBAC.</td>
+    </tr>
+    <tr>
+     <td class="epic">B5</td>
+     <td class="title">Evidenze di compliance ed export</td>
+     <td class="count">3</td>
+     <td class="coverage">Audit log, pacchetto ZIP ispezione Banca d'Italia, GDPR DSAR.</td>
+    </tr>
+    <tr>
+     <td class="epic">B6</td>
+     <td class="title">Upsell a DVR Pro (Tier 2)</td>
+     <td class="count">3</td>
+     <td class="coverage">Ricavi Tier 2, checkout Stripe, ledger 20% rev-share banca.</td>
+    </tr>
+    <tr>
+     <td class="epic">B7</td>
+     <td class="title">Cross-cutting (privacy, audit, GDPR, sicurezza)</td>
+     <td class="count">4</td>
+     <td class="coverage">Isolamento multi-tenant, generazione DPA, rate-limiting, rilevazione manomissione PDF.</td>
+    </tr>
+    <tr class="total">
+     <td class="epic">Σ</td>
+     <td class="title">Scope MVP totale</td>
+     <td class="count">30</td>
+     <td class="coverage">Tutti gli indicatori MEF Sezione 4 + principali cross-settore</td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+</section>
+
+<section class="block dark" id="backlog">
+ <div class="sect-head">
+  <div class="divider-bar"></div>
+  <div class="sect-eyebrow">Sezione 05</div>
+  <h2>Backlog fuori-MVP</h2>
+  <p>Funzionalità rinviate al post-MVP. Tracciate per la prioritizzazione una volta validate l'adozione Tier-1 e la rev-share con le banche.</p>
+ </div>
+ <div class="backlog-grid">
+  <div class="backlog-card"><div class="backlog-id">US-B8.1</div><p>SSO con IdP della banca (SAML / OIDC)</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.2</div><p>Integrazione API core banking (Cedacri, CSE)</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.3</div><p>Vista PMI multi-banca — "vedi tutte le banche che ti chiedono questa autodichiarazione"</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.4</div><p>App mobile (iOS / Android)</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.5</div><p>Dichiarazione delta infrannuale — "è cambiato qualcosa rispetto all'ultima dichiarazione?"</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.6</div><p>Email-from white-label su dominio banca personalizzato (richiede DKIM per banca)</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.7</div><p>Assistente AI nel wizard — "aiuto, non so cosa rispondere qui"</p></div>
+  <div class="backlog-card"><div class="backlog-id">US-B8.8</div><p>Benchmark aggregato per ATECO — anonimizzato "tasso infortuni vs. media settore"</p></div>
+ </div>
+</section>
+
+<footer class="footer">
+ <div class="footer-left">
+  <img src="data:image/png;base64,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" alt="NIUEXA" />
+  <span class="footer-text">© 2026 NIUEXA — BEBIT S.R.L. — AI-Powered Business Automation</span>
+ </div>
+ <div class="footer-right">N2O DVR · Add-on Banca ESG-Social · Confidenziale</div>
+</footer>
+
+<div class="modal-bg" id="modal-bg">
+ <div class="modal" id="modal"></div>
+</div>
+
+<script>
+const epics = [
+ {id:'B1',title:'Onboarding banca & setup white-label',count:4,desc:"Avvia un ambiente white-label per una nuova banca partner senza interventi di engineering — tenant, branding, import clienti, provisioning admin.",tags:['Tenant','Branding','RBAC','Audit']},
+ {id:'B2',title:'Onboarding cliente corporate (flusso di invito)',count:4,desc:"Auth magic-link senza attriti per i clienti PMI, con email co-branded, solleciti automatici e codici di backup a 6 cifre.",tags:['Magic link','Solleciti','Anti-frode']},
+ {id:'B3',title:'Compilazione autodichiarazione (Tier 1, free)',count:7,desc:"Wizard a 7 step che cattura tutti gli indicatori MEF Sezione 4, con PDF firmato PADES, anteprima semaforo e auto-save delle bozze.",tags:['MEF Sezione 4','PADES','Semaforo','Wizard']},
+ {id:'B4',title:'Dashboard Banca Admin',count:5,desc:"Copertura del portafoglio, drill-down sul rischio cliente, heatmap ATECO × semaforo, export SREP, RBAC per lo staff bancario.",tags:['Dashboard','Heatmap','Export SREP','RBAC']},
+ {id:'B5',title:'Evidenze di compliance ed export',count:3,desc:"Audit log append-only, pacchetto ZIP ispezione Banca d'Italia con un click, GDPR DSAR per gli interessati PMI.",tags:['Audit log','Ispezione BI','GDPR DSAR']},
+ {id:'B6',title:'Upsell a DVR Pro (Tier 2)',count:3,desc:"Card di upsell post-invio, checkout Stripe in EUR, ledger di revenue-share del 20% alla banca segnalatrice.",tags:['Stripe','Upsell','Rev-share']},
+ {id:'B7',title:'Cross-cutting (privacy, audit, GDPR, sicurezza)',count:4,desc:"Isolamento multi-tenant (nessuna fuga di dati tra banche), generazione DPA, rate-limiting, rilevazione manomissione PDF.",tags:['Multi-tenant','DPA','Rate limit','Integrità']}
+];
+
+const stories = [
+ // B1
+ {id:'US-B1.1',epic:'B1',persona:'N2O Compliance Officer',pclass:'niuexa',title:'L\'admin Niuexa crea un nuovo tenant Banca',want:'creare un nuovo tenant banca da una pagina admin interna',benefit:'possiamo avviare un ambiente white-label per una nuova banca partner senza interventi di engineering',ac:[['AC1','**Given** I am logged in as `niuexa_admin`, **when** I visit `/admin/banche/nuova` and submit name + slug + AD name + AD email + setup notes, **then** a new `Banca` record is created with status `setup_in_corso` and a `BancaBranding` row is auto-created with default theme.'],['AC2','**Given** a `Banca` with slug `democredit`, **when** I visit the white-label URL, **then** the PMI portal loads with default theme and bank name in the header.'],['AC3','**Given** I create a Banca, **when** I submit, **then** an audit log entry is written with my user id, timestamp, and the diff.']],dod:['Migration adds `banca` + `banca_branding` tables','Endpoint `POST /admin/banche` + UI at `/admin/banche/nuova`','Audit log emits `banca.created` event','E2E test `tests/e2e/banca/test_b1_create_tenant.spec.ts`','Unit test `tests/test_banca_repository.py::test_create_and_uniqueness`'],test:'Playwright + pytest'},
+ {id:'US-B1.2',epic:'B1',persona:'N2O Compliance Officer',pclass:'niuexa',title:'L\'admin Niuexa configura il branding di una Banca',want:"caricare il logo della banca e scegliere i colori primario/secondario",benefit:"il portale white-label sembri il prodotto stesso della banca",ac:[['AC1','**Given** an existing Banca, **when** I upload a PNG/SVG logo (≤ 500 KB) and save 3 hex colors and a CTA copy variant, **then** `BancaBranding.config` is updated.'],['AC2','**Given** I save a malformed hex color, **then** the form rejects with a clear error and nothing is persisted.'],['AC3','**When** I save valid branding, **then** the PMI portal at `/esg/{slug}` reflects the new theme within 60 seconds (no rebuild required).']],dod:['Theming is data-driven via CSS variables injected from `BancaBranding.config`','Logo stored on Render Disk (or S3-compatible) with signed URL','E2E test verifies portal renders with custom colors','Snapshot test `tests/e2e/banca/test_b1_branding.spec.ts`'],test:'Playwright snapshot'},
+ {id:'US-B1.3',epic:'B1',persona:'N2O Compliance Officer',pclass:'niuexa',title:'L\'admin Niuexa importa la lista dei clienti corporate per una Banca',want:'importare in bulk un CSV di clienti corporate (ragione sociale, P.IVA, email DdL, sede)',benefit:"la banca non debba mandare PEC per PEC",ac:[['AC1','**Given** a Banca, **when** I upload a CSV with valid headers, **then** each row creates a `BancaCorporateClient` in status `da_invitare`, linked to an `Azienda` (created if not exists, matched by P.IVA if exists).'],['AC2','**Given** an Azienda already exists in another Banca\'s portfolio, **when** I import it, **then** a NEW `BancaCorporateClient` is created (the company can be cliente of multiple banks). **No data leak between banks.**'],['AC3','**Given** a CSV with 100 rows and 3 invalid (missing P.IVA), **then** 97 are imported, 3 are reported with row number and error message.']],dod:['Endpoint `POST /admin/banche/{slug}/clienti/import` accepting `multipart/form-data`','P.IVA matching uses existing `azienda.partita_iva` index','Integration test importing CSV with deduplication scenarios','**Negative test:** import same P.IVA in two banks, verify isolation'],test:'Integration + negative'},
+ {id:'US-B1.4',epic:'B1',persona:'N2O Compliance Officer',pclass:'niuexa',title:'Viene provisioned un utente Banca Admin',want:'invitare un dipendente della banca come Banca Admin',benefit:'la banca possa gestire la dashboard in self-service',ac:[['AC1','Invitation email sent with magic link (24h validity).'],['AC2','On accepting, the user gets role `banca_admin` scoped to the Banca, and lands on the bank dashboard.'],['AC3','Audit log records the role grant.']],dod:['New role in RBAC enum','E2E test: invite → accept → dashboard renders → user **cannot** access another banca\'s data (negative test)'],test:'E2E + negative'},
+ // B2
+ {id:'US-B2.1',epic:'B2',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin lancia una campagna di invito ai clienti corporate',want:'lanciare con un click una campagna di invito a tutti i miei clienti in stato `da_invitare`',benefit:'tutti i miei clienti corporate ricevano in un colpo solo un\'email branded',ac:[['AC1','**Given** N corporate clients in `da_invitare`, **when** I click "Invia inviti", **then** N emails are queued via Celery, each with a unique `InvitoBanca` token and 14-day expiry.'],['AC2','Email is co-branded (bank logo + N2O footer), uses bank\'s `from` name + reply-to.'],['AC3','Each client\'s status transitions to `invitato` with `invitato_at` timestamp.'],['AC4','If I click again, only clients still in `da_invitare` get the email (no double-send).']],dod:['Celery task `send_banca_invites`','Email template `templates/emails/banca_invito.html` with theming variables','Idempotency guarantee tested with concurrent clicks','E2E test with 5 clients, verify 5 mails sent (mock SMTP)'],test:'E2E + idempotency'},
+ {id:'US-B2.2',epic:'B2',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin pianifica solleciti automatici',want:'che gli inviti generino solleciti automatici a +7, +14, +30 giorni',benefit:"non debba rincorrere i clienti manualmente",ac:[['AC1','Reminders skip clients that already submitted.'],['AC2','Reminder copy differs per round ("primo sollecito", "secondo sollecito", "ultimo sollecito" with gestore CC).'],['AC3','Banca Admin can disable reminders per client (e.g. cliente in fase di chiusura conto).']],dod:['Celery beat schedule for daily reminder pass','Test with frozen-time fixture verifying reminder triggers'],test:'Frozen-time test'},
+ {id:'US-B2.3',epic:'B2',persona:'Corporate DdL',pclass:'corp',title:'Il DdL Corporate accetta l\'invito via magic link',want:'cliccare il link nell\'email e accedere al portale senza registrare una password',benefit:'l\'attrito iniziale sia pari a zero',ac:[['AC1','**Given** a valid `InvitoBanca` token, **when** I click, **then** I land on `/esg/{banca_slug}/benvenuto` with my company name pre-loaded and a CTA "Inizia autodichiarazione".'],['AC2','**Given** an expired token, **then** I see a "richiedi nuovo link" page that emails me a fresh one.'],['AC3','**Given** I accept, **then** my session is authenticated for 14 days (refreshed on use), my `BancaCorporateClient` status becomes `accesso_effettuato`, and audit log captures my IP and user agent.'],['AC4','**Given** I am offered the optional "vuoi anche la consulenza completa N2O?" toggle and I accept, **then** my Azienda is also linked to N2O\'s `organization_id` for shared visibility.']],dod:['Magic-link endpoint `POST /auth/magic-link/{token}` with one-time-use semantics','Session cookie with `HttpOnly`, `Secure`, `SameSite=Lax`','E2E test happy path + expired + already-used token'],test:'E2E happy/edge'},
+ {id:'US-B2.4',epic:'B2',persona:'Corporate DdL',pclass:'corp',title:'Il DdL Corporate riceve un codice numerico di backup se il link non funziona',want:'un codice a 6 cifre nella stessa email',benefit:'possa autenticarmi anche se il link viene corrotto dal mio client di posta',ac:[['AC1','Email contains both magic link and a 6-digit code valid 15 minutes.'],['AC2','Entering the code on `/esg/{banca}/codice` authenticates same as the link.'],['AC3','Code is rate-limited: 5 wrong attempts trigger 15-minute lockout.']],dod:['E2E test with code-based flow','Brute-force resilience test'],test:'E2E + brute-force'},
+ // B3
+ {id:'US-B3.1',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL completa lo step anagrafica con auto-prefill',want:'che il wizard pre-compili l\'anagrafica della mia azienda dalla visura camerale',benefit:"non riscriva quello che già si sa",ac:[['AC1','**Given** Azienda has a parsed visura, **then** ragione sociale, P.IVA, sede, codice ATECO, dipendenti, forma giuridica are pre-filled and editable.'],['AC2','**Given** no visura present, **then** the user can upload a PDF and the existing extraction runs.'],['AC3','Fields enter validation (P.IVA format, CAP format) before allowing "Avanti".']],dod:['Reuses existing visura extraction pipeline','E2E test with seeded Azienda → wizard step 1 → "Avanti" → fields visible'],test:'E2E'},
+ {id:'US-B3.2',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL inserisce/conferma headcount, mix contrattuale, CCNL',want:'inserire i dipendenti per tipo di contratto (T.I., T.D., apprendisti) e selezionare il nostro CCNL da una lista',benefit:'siano catturati gli indicatori MEF 28, 35, 36',ac:[['AC1','Headcount fields validate as integers ≥ 0.'],['AC2','CCNL picker is autocomplete on a seeded lookup table (≥ 30 most common CCNLs incl. metalmeccanici, terziario, edilizia, etc.).'],['AC3','Field "% lavoratori coperti da CCNL" defaults to 100 with note "in Italia tipicamente 100%; modifica se diverso".']],dod:['`CCNL` lookup table seeded with N2O reference list','E2E test selects CCNL and verifies persistence'],test:'E2E'},
+ {id:'US-B3.3',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL invia le statistiche annuali di sicurezza (indicatori MEF Priorità 1)',want:'inserire i nostri infortuni INAIL, giornate perse e decessi dell\'anno',benefit:'la banca riceva i 3 indicatori di Priorità 1 richiesti dall\'EBA',ac:[['AC1','Three numeric inputs with help-text quoting MEF definitions (one-click expandable).'],['AC2','Tasso di infortuni computed automatically when user enters ore lavorate totali (or estimated from FTE × 2000 if user opts in).'],['AC3','If user enters decessi > 0, an empathetic banner is shown ("ci dispiace; questi dati sono trattati con riservatezza") + a free-text "Note" field for context.'],['AC4','Banker semaphore preview: 🟢 green if 0 deaths AND tasso ≤ industry median; 🟡 yellow if above median; 🔴 red if deaths > 0 OR tasso > 2× median.']],dod:['Stores in `RegistroInfortuni` (new entity) keyed (azienda_id, anno_riferimento)','Median per ATECO seeded from INAIL public data (or fallback global median)','E2E test verifies semaphore changes with input'],test:'E2E'},
+ {id:'US-B3.4',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL conferma policy di sicurezza e riepilogo formazione',want:'confermare che abbiamo un DVR aggiornato, RSPP/RLS designati, e riportare le ore di formazione',benefit:'siano catturati gli indicatori MEF 26, 31, 39',ac:[['AC1','Checkbox "DVR aggiornato negli ultimi 24 mesi" — required; if unchecked, blocks submission and surfaces upsell to DVR Pro.'],['AC2','Numeric "Ore di formazione SS erogate nell\'anno (totale aziendale)" + "di cui obbligatoria".'],['AC3','Free-text "Procedure per segnalazione situazioni di pericolo (max 500 caratteri)".'],['AC4','Optional toggles: certificazione ISO 45001, codice etico presente.']],dod:['Persists to `AutodichiarazioneSnapshot.payload` JSONB','E2E happy path test'],test:'E2E'},
+ {id:'US-B3.5',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL rivede il riepilogo e firma digitalmente',want:'rivedere tutte le mie risposte in una pagina sola e firmare il documento',benefit:'invii una dichiarazione formale come per qualsiasi altra compliance',ac:[['AC1','Summary page shows all 12 indicators with edit links per section.'],['AC2','Signature step: canvas signature pad + checkbox "dichiaro che le informazioni sono veritiere ai sensi DPR 445/2000".'],['AC3','On submit: PADES-signed PDF generated, `AutodichiarazioneSnapshot` stored (immutable), email sent to DdL (copy) and to Banca Admin (notification of new submission), `BancaCorporateClient.status = submitted`.']],dod:['PDF generator with PADES signature (reuse existing `firma_png` on Azienda)','Snapshot is immutable: schema constraint prevents UPDATE','E2E test: sign → see confirmation → re-load → **cannot edit** → must "nuova compilazione anno X+1"'],test:'E2E + DB constraint'},
+ {id:'US-B3.6',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL può salvare una bozza a metà wizard',want:'uscire e tornare senza perdere il lavoro fatto',benefit:'possa dedicarci 10 minuti qui e 10 lì',ac:[['AC1','Form auto-saves to `AutodichiarazioneDraft` every 30 seconds and on each "Avanti" click.'],['AC2','On re-entry, wizard resumes at the last completed step.'],['AC3','Draft is discarded once submitted.']],dod:['Auto-save tested in E2E (kill tab → reopen)'],test:'E2E'},
+ {id:'US-B3.7',epic:'B3',persona:'Corporate DdL',pclass:'corp',title:'Il DdL scarica il PDF firmato dopo l\'invio',want:'scaricare il PDF firmato',benefit:'abbia la mia copia archiviata',ac:[['AC1','Post-submission, "Scarica PDF" CTA.'],['AC2','PDF includes bank logo, N2O footer, all 12 indicators, signature, timestamp, document hash.'],['AC3','Re-downloads allowed any time within session validity.']],dod:['PDF hash stored in `AutodichiarazioneSnapshot.pdf_sha256`','E2E download + open + visual assertion on key strings'],test:'E2E + visual'},
+ // B4
+ {id:'US-B4.1',epic:'B4',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin vede la copertura del portafoglio',want:'una dashboard con la % di clienti che hanno inviato vs invitati vs in attesa',benefit:'possa pianificare campagne di sollecito e riferire al CdA',ac:[['AC1','Top tiles: Total clients / Invited / Accessed / Submitted / Overdue (> 30 days post-invite without submission).'],['AC2','Donut chart of status distribution.'],['AC3','Filter by ATECO macro-sector, area geografica, ramo (corporate/SMI).'],['AC4','Updated every load; no caching of stale data.']],dod:['SQL aggregation tested with 1000-client fixture, <500ms p95','E2E test verifies tiles update after a submission'],test:'E2E + perf'},
+ {id:'US-B4.2',epic:'B4',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin fa drill-down sul singolo cliente',want:'cliccare un cliente e vedere l\'ultimo invio con i dettagli del semaforo',benefit:'possa segnalare le relazioni ad alto rischio al comitato crediti',ac:[['AC1','Client detail page shows: latest submission date, semaphore, all 12 indicators in tabular form, downloadable PDF.'],['AC2','History of all years\' submissions if multiple.'],['AC3','Read-only — Banca Admin cannot edit client data, only view.']],dod:['Permission test: Banca Admin of Banca A **cannot** access client of Banca B (negative test in CI)'],test:'Negative test in CI'},
+ {id:'US-B4.3',epic:'B4',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin esporta il portafoglio per SREP',want:'esportare CSV/Excel di tutti gli invii con tutti gli indicatori',benefit:'possa darlo in pasto al nostro sistema di credit risk o condividerlo per l\'ispezione Banca d\'Italia',ac:[['AC1','Export includes: P.IVA, ragione sociale, ATECO, all 12 indicators, semaphore, submission date, PDF hash, signed-by.'],['AC2','Export respects current filters.'],['AC3','Background job for >1000 rows; emails the download link when ready.']],dod:['CSV + XLSX formats','Hash column allows banks to prove integrity to ispettori','E2E test exports 100-row fixture'],test:'E2E'},
+ {id:'US-B4.4',epic:'B4',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin vede la heatmap di distribuzione del rischio',want:'una heatmap dei clienti per ATECO × semaforo',benefit:'individui concentrazioni di rischio sociale a livello settoriale',ac:[['AC1','Heatmap with ATECO macro on Y, R/Y/G on X, cell count + % of portfolio.'],['AC2','Click a cell drills to filtered client list.']],dod:['E2E test verifies heatmap renders for fixture with mixed sectors'],test:'E2E'},
+ {id:'US-B4.5',epic:'B4',persona:'Banca Admin',pclass:'banca',title:'Il Banca Admin gestisce i permessi degli utenti',want:'aggiungere o rimuovere altro personale banca con ruolo `banca_viewer` (sola lettura)',benefit:'i credit officer possano consultare senza modificare i dati',ac:[['AC1','Add user by email; magic-link invite; choose role `banca_admin` or `banca_viewer`.'],['AC2','Remove user; access revoked within 60 seconds.'],['AC3','Banca Admin cannot escalate themselves to `niuexa_admin`.']],dod:['RBAC enforced server-side; client-side permission check tested','Privilege escalation negative test'],test:'Privilege escalation'},
+ // B5
+ {id:'US-B5.1',epic:'B5',persona:'N2O Compliance Officer',pclass:'niuexa',title:'L\'audit log è interrogabile',want:'un endpoint di audit log scoped per Banca',benefit:'durante l\'ispezione possiamo dimostrare "chi ha fatto cosa, quando"',ac:[['AC1','`GET /admin/banche/{slug}/audit?from=...&to=...` returns paginated events.'],['AC2','Events captured: invitation sent, draft started, draft saved, submitted, exported, deleted (if ever).'],['AC3','Audit entries are **immutable** (append-only).']],dod:['DB constraint preventing UPDATE on `audit_log_banca` table','Test attempts to modify a row → fails'],test:'DB constraint test'},
+ {id:'US-B5.2',epic:'B5',persona:'Banca Admin',pclass:'banca',title:'Pacchetto export "Ispezione Banca d\'Italia"',want:'un "pacchetto ispezione" ZIP generato con un click che contenga tutti gli invii in PDF + un CSV manifest con gli hash',benefit:'lo consegni all\'ispettore BI e l\'ispezione sia veloce',ac:[['AC1','ZIP includes: CSV with all client metadata + indicators + PDF SHA-256 + signature timestamp; PDFs of all submissions (latest per year); audit log CSV; coverage report.'],['AC2','ZIP filename: `ispezione_{banca_slug}_{YYYY-MM-DD}.zip`.'],['AC3','Background job for >500 PDFs; email link when ready, 7-day signed URL.']],dod:['E2E test generates package with 50-client fixture, opens ZIP, verifies hash match'],test:'E2E + hash verify'},
+ {id:'US-B5.3',epic:'B5',persona:'Corporate DdL',pclass:'corp',title:'Richiesta GDPR di accesso ai dati (DSAR)',want:'richiedere una copia o la cancellazione dei miei dati',benefit:'eserciti i miei diritti GDPR',ac:[['AC1','"I miei dati / GDPR" link in PMI portal footer.'],['AC2','Export: all `AutodichiarazioneSnapshot` for my Azienda + my access log.'],['AC3','Deletion: anonymizes personal fields (DdL name, signature, IP) but retains anonymized statistical record for bank\'s audit needs. Communicates to Banca Admin via email.']],dod:['30-day SLA on requests','E2E test requesting export → ZIP download'],test:'E2E'},
+ // B6
+ {id:'US-B6.1',epic:'B6',persona:'Corporate DdL',pclass:'corp',title:'Il DdL vede l\'upsell di DVR Pro dopo l\'invio',want:'vedere cos\'altro N2O può fare per me',benefit:'se il mio DVR sta per scadere, sappia di poter fare upgrade subito',ac:[['AC1','Post-submission page shows 3 upsell cards: "Aggiorna il tuo DVR", "Allegato MMC", "Pacchetto completo 16 documenti".'],['AC2','Cards are dynamic: if I marked "DVR aggiornato negli ultimi 24 mesi", de-emphasize "Aggiorna il tuo DVR".'],['AC3','Each card has price and "Inizia" CTA.']],dod:['E2E test verifies cards render and CTAs route to product page'],test:'E2E'},
+ {id:'US-B6.2',epic:'B6',persona:'Corporate DdL',pclass:'corp',title:'Il DdL acquista DVR Pro via Stripe',want:'pagare con carta e accedere subito al prodotto completo',benefit:"non debba aspettare la fatturazione",ac:[['AC1','Stripe Checkout in Italian, EUR.'],['AC2','On success: invoice generated, `DvrProSubscription` created, Azienda flagged `dvr_pro_active`, user gains access to the full DVR wizard inside the same portal.'],['AC3','On failure: clear message, retry option.']],dod:['Stripe webhook signed-verified','Test mode E2E with Stripe test card'],test:'E2E Stripe test mode'},
+ {id:'US-B6.3',epic:'B6',persona:'N2O Compliance Officer',pclass:'niuexa',title:'La revenue share alla Banca viene tracciata',want:'che ogni acquisto Tier 2 da una PMI introdotta dalla Banca attribuisca il 20% alla Banca',benefit:'possa pagare la rev share a fine mese senza riconciliazioni manuali',ac:[['AC1','`RevShareLedger` entry on every successful Stripe payment for a `BancaCorporateClient`-linked Azienda.'],['AC2','Monthly aggregate report at `/admin/banche/{slug}/revenue` with downloadable CSV.'],['AC3','SEPA payout flow (manual or via Stripe Connect — choose later) records `paid_at` on settle.']],dod:['Unit test: payment event → ledger entry with correct % and banca attribution','Negative test: payment for a non-banca Azienda creates NO ledger entry'],test:'Unit + negative'},
+ // B7
+ {id:'US-B7.1',epic:'B7',persona:'Niuexa engineer',pclass:'eng',title:'Isolamento multi-tenant garantito ovunque',want:'che ogni query su `Azienda` o `BancaCorporateClient` sia scoped sul tenant corrente',benefit:'la Banca A non veda mai i dati della Banca B nemmeno in caso di bug nel codice',ac:[['AC1','A repository helper `with_banca_scope(banca_id)` is the only way to query bank-scoped entities.'],['AC2','Direct `Azienda.query.all()` in bank-context code raises a lint/static-analysis error.'],['AC3','CI runs cross-tenant negative test fixture: User of Banca A tries to read Banca B\'s `BancaCorporateClient` → 404 (not 403, to avoid existence leak).']],dod:['Custom static analysis rule (e.g. via custom lint) or runtime middleware enforcement','Negative test in CI'],test:'Lint + CI negative'},
+ {id:'US-B7.2',epic:'B7',persona:'N2O Compliance Officer',pclass:'niuexa',title:'Generazione di un artefatto DPA per ogni Banca',want:'generare un PDF di DPA personalizzato per ogni Banca',benefit:'possa inviarlo per la firma senza redazione manuale',ac:[['AC1','From `/admin/banche/{slug}/dpa/genera`, downloadable PDF with bank name, addresses, technical/organizational measures appendix, signed by Niuexa legal rep.'],['AC2','Template versioned; current version recorded on the Banca record.']],dod:['Template file in `templates/legal/dpa_template.docx`','Unit test of variable substitution'],test:'Unit test'},
+ {id:'US-B7.3',epic:'B7',persona:'Niuexa engineer',pclass:'eng',title:'Rate-limiting e anti-abuse del magic link',want:'che l\'endpoint magic-link sia rate-limited per IP e per email',benefit:'un attaccante non possa enumerare email PMI valide',ac:[['AC1','5 requests/minute per IP, 3 requests/hour per email.'],['AC2','On exceeding, returns 429 with vague "se l\'indirizzo esiste, riceverai una mail" (no enumeration leak).'],['AC3','Persistent storage (Redis) for rate-limit counters.']],dod:['Load test with 100 concurrent requests confirms backpressure'],test:'Load test'},
+ {id:'US-B7.4',epic:'B7',persona:'Banca Admin',pclass:'banca',title:'Integrità degli invii (rilevazione manomissione PDF)',want:'che il pacchetto export includa un hash per ciascun PDF',benefit:'un PDF manomesso possa essere rilevato ricalcolando l\'hash',ac:[['AC1','Every `AutodichiarazioneSnapshot` stores `pdf_sha256`.'],['AC2','Bank can re-hash a downloaded PDF and compare.'],['AC3','A tamper-detection page at `/esg/{banca}/verifica` accepts a PDF and reports match/mismatch.']],dod:['E2E test: download PDF → modify 1 byte → upload to verifier → mismatch reported'],test:'E2E tamper test'}
+];
+
+const epicsGrid = document.getElementById('epics-grid');
+epics.forEach(e=>{
+ const card = document.createElement('div');
+ card.className='epic-card';card.dataset.epic=e.id;
+ card.innerHTML=`<div class="epic-head"><div class="epic-id">${e.id}</div><div class="epic-count">${e.count}<small>storie</small></div></div><h3>${e.title}</h3><p>${e.desc}</p><div class="epic-tags">${e.tags.map(t=>`<span class="epic-tag">${t}</span>`).join('')}</div>`;
+ card.addEventListener('click',()=>{
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.filter-chip[data-filter="${e.id}"]`).classList.add('active');
+  filterStories(e.id,document.getElementById('search').value);
+  document.getElementById('stories').scrollIntoView({behavior:'smooth',block:'start'});
+ });
+ epicsGrid.appendChild(card);
+});
+
+const grid = document.getElementById('stories-grid');
+function renderStories(list){
+ grid.innerHTML='';
+ list.forEach(s=>{
+  const c=document.createElement('div');
+  c.className='story';
+  const wantPart = `Come <i>${s.persona}</i>, voglio <i>${s.want}</i>, così che <i>${s.benefit}</i>.`;
+  c.innerHTML=`<div class="story-meta"><span class="story-id">${s.id}</span><span class="story-persona ${s.pclass}">${s.persona}</span></div><h4>${s.title}</h4><div class="story-want">${wantPart}</div><div class="story-footer"><span>${s.ac.length} criteri AC</span><span class="test">${s.test}</span><span class="indicator">${s.dod.length} voci DoD</span></div>`;
+  c.addEventListener('click',()=>openModal(s));
+  grid.appendChild(c);
+ });
+ document.getElementById('rc').textContent = list.length;
+}
+function filterStories(epic,q){
+ const Q = (q||'').trim().toLowerCase();
+ const list = stories.filter(s=>{
+  const epicOk = epic==='all'||s.epic===epic;
+  const qOk = !Q || s.id.toLowerCase().includes(Q) || s.title.toLowerCase().includes(Q) || s.want.toLowerCase().includes(Q) || s.benefit.toLowerCase().includes(Q) || s.persona.toLowerCase().includes(Q);
+  return epicOk && qOk;
+ });
+ renderStories(list);
+}
+renderStories(stories);
+
+document.querySelectorAll('.filter-chip').forEach(chip=>{
+ chip.addEventListener('click',()=>{
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  filterStories(chip.dataset.filter,document.getElementById('search').value);
+ });
+});
+document.getElementById('search').addEventListener('input',e=>{
+ const active = document.querySelector('.filter-chip.active').dataset.filter;
+ filterStories(active,e.target.value);
+});
+
+// Modal
+function fmtMd(t){return t.replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')}
+function openModal(s){
+ const m=document.getElementById('modal');
+ const wantBlock = `<strong>Come</strong> ${s.persona}, <strong>voglio</strong> ${s.want}, <strong>così che</strong> ${s.benefit}.`;
+ m.innerHTML=`<div class="modal-head"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-id">${s.id} · Epic ${s.epic}</div><h3>${s.title}</h3><div class="modal-meta"><span class="modal-meta-chip">${s.persona}</span><span class="modal-meta-chip">${s.ac.length} criteri di accettazione</span><span class="modal-meta-chip">${s.test}</span></div></div><div class="modal-body"><div class="modal-section"><h4>Storia utente</h4><div class="story-block">${wantBlock}</div></div><div class="modal-section"><h4>Criteri di accettazione</h4><div class="ac-list">${s.ac.map(a=>`<div class="ac-item"><span class="ac-num">${a[0]}</span><div>${fmtMd(a[1])}</div></div>`).join('')}</div></div><div class="modal-section"><h4>Definition of Done</h4><div class="dod-list">${s.dod.map(d=>`<div class="dod-item">${fmtMd(d)}</div>`).join('')}</div></div></div>`;
+ document.getElementById('modal-bg').classList.add('open');
+ document.body.style.overflow='hidden';
+}
+function closeModal(){
+ document.getElementById('modal-bg').classList.remove('open');
+ document.body.style.overflow='';
+}
+document.getElementById('modal-bg').addEventListener('click',e=>{if(e.target.id==='modal-bg')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+</body>
+</html>
