@@ -167,6 +167,7 @@ label.lbl{display:block;font-size:13.5px;font-weight:600;color:var(--testo-2);ma
 @media(min-width:1280px){
   .q-lista{max-width:1380px;display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;align-content:start}
   .q-item{margin-bottom:0}
+  .q-sez{grid-column:1/-1}
   .q-footer{grid-column:1/-1;margin-top:10px}
   .q-azienda,.q-prog,.q-barra{max-width:1380px}
 }
@@ -177,6 +178,16 @@ label.lbl{display:block;font-size:13.5px;font-weight:600;color:var(--testo-2);ma
 .tg.no.on{background:var(--grigio);border-color:var(--grigio);color:#fff}
 .q-footer{max-width:880px;margin:6px auto 0;text-align:center}
 .q-dpr{font-size:12px;color:#5A6B80;margin-top:12px}
+.q-sez{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--blu);background:var(--blu-chiaro);border-radius:8px;padding:9px 14px;margin:16px 0 6px}
+.q-sez:first-child{margin-top:0}
+.q-input{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.q-input input{width:148px;padding:9px 12px;text-align:right}
+.q-input.has-u input{width:118px}
+.q-input.wide input{width:248px;text-align:left}
+.q-input input:disabled{background:var(--grigio-bg);color:#9AA7B4;cursor:not-allowed}
+.q-unit{font-size:13px;font-weight:700;color:var(--testo-2);min-width:30px}
+.q-item.cond-off{opacity:.55}
+.q-item.cond-off .num{color:var(--grigio)}
 
 /* ---------- 10 firma ---------- */
 .split{display:flex;gap:30px;max-width:1080px;margin:0 auto;padding:34px 24px;align-items:flex-start}
@@ -368,26 +379,58 @@ const CONFIG = {
   // [PLACEHOLDER CLAUSOLE AVVOCATO — incl. disdetta piano mensile, in arrivo dal legale di Luca]
   CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 30 settembre 2026. Il servizio è erogato da N2O in collaborazione con la Banca, con piano annuale o mensile. Il piano mensile costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
 
-  // [PLACEHOLDER — 12 domande in attesa del PDF definitivo di Luca]
-  DOMANDE: [
-    "L'azienda ha redatto e mantiene aggiornato il Documento di Valutazione dei Rischi (DVR)?",
-    "È stato nominato il Responsabile del Servizio di Prevenzione e Protezione (RSPP)?",
-    "È stato nominato il Medico Competente, ove previsto?",
-    "I lavoratori hanno completato la formazione obbligatoria in materia di sicurezza?",
-    "Sono stati consegnati i Dispositivi di Protezione Individuale previsti?",
-    "È attiva la sorveglianza sanitaria per le mansioni che la richiedono?",
-    "L'azienda è in regola con il DURC?",
-    "Negli ultimi 3 anni si sono verificati infortuni con prognosi superiore a 40 giorni?",
-    "Sono presenti procedure di gestione delle emergenze (antincendio e primo soccorso) con addetti designati?",
-    "L'azienda applica un CCNL sottoscritto dalle organizzazioni sindacali comparativamente più rappresentative?",
-    "Sono adottate procedure contro discriminazioni e molestie sul luogo di lavoro?",
-    "L'azienda ha ricevuto provvedimenti o sanzioni in materia di lavoro e sicurezza negli ultimi 3 anni?"
+  // [Questionario ESG-Social — contenuto definitivo fornito dalla banca]
+  // A1 "Ragione sociale" è raccolta nella pagina Dati di fatturazione e mostrata in intestazione: non si ripete qui.
+  SEZIONI: [
+    { id:"A", titolo:"Anagrafica", dom:[
+      { id:"A4", t:"Sede operativa", tipo:"testo", ph:"Indirizzo unità produttiva" },
+      { id:"A5", t:"N° dipendenti al 31/12/2025", tipo:"num" },
+      { id:"A6", t:"Fatturato 2025", tipo:"eur", u:"€" }
+    ]},
+    { id:"B", titolo:"Environment — ambiente ed emissioni", dom:[
+      { id:"B1", t:"Consumi di energia elettrica 2025", tipo:"num", u:"kWh" },
+      { id:"B2", t:"Consumi di gas / metano 2025", tipo:"num", u:"Smc" },
+      { id:"B3", t:"Sono note le tonnellate di CO₂ emesse nel 2025?", tipo:"sn" },
+      { id:"B4", t:"Se sì, tonnellate di CO₂ totali", tipo:"num", u:"ton", cond:"B3" },
+      { id:"B5", t:"L'azienda produce rifiuti speciali?", tipo:"sn" },
+      { id:"B6", t:"Se sì, tonnellate di rifiuti prodotte nel 2025", tipo:"num", u:"ton", cond:"B5" },
+      { id:"B7", t:"L'azienda utilizza acqua nel processo produttivo?", tipo:"sn" },
+      { id:"B8", t:"Esiste una politica scritta per ridurre consumi e inquinamento?", tipo:"sn" }
+    ]},
+    { id:"C", titolo:"Social — salute, sicurezza e lavoro", dom:[
+      { id:"C1", t:"DVR aggiornato al 2025?", tipo:"sn" },
+      { id:"C2", t:"Medico Competente nominato?", tipo:"sn" },
+      { id:"C3", t:"Corsi di formazione obbligatori svolti nel 2025?", tipo:"sn" },
+      { id:"C4", t:"N° infortuni sul lavoro nel 2025", tipo:"num" },
+      { id:"C5", t:"Giorni persi per infortuni e malattia nel 2025", tipo:"num", u:"gg" },
+      { id:"C6", t:"Dipendenti con visita medica effettuata nel 2025", tipo:"pct", u:"%" },
+      { id:"C7", t:"Donne sul totale dei dipendenti", tipo:"pct", u:"%" },
+      { id:"C8", t:"Multe o sanzioni INAIL / Ispettorato nel 2025?", tipo:"sn" },
+      { id:"C9", t:"Se sì, importo totale delle multe", tipo:"eur", u:"€", cond:"C8" }
+    ]},
+    { id:"D", titolo:"Governance", dom:[
+      { id:"D1", t:"Multe o sanzioni per corruzione nel 2025?", tipo:"sn" },
+      { id:"D2", t:"Se sì, importo", tipo:"eur", u:"€", cond:"D1" },
+      { id:"D3", t:"Esiste una procedura scritta per segnalare comportamenti scorretti (whistleblowing)?", tipo:"sn" }
+    ]},
+    { id:"E", titolo:"Obiettivi 2026", dom:[
+      { id:"E1", t:"L'azienda si pone un obiettivo di riduzione di consumi / CO₂ nel 2026?", tipo:"sn" },
+      { id:"E2", t:"L'azienda si pone un obiettivo di riduzione degli infortuni nel 2026?", tipo:"sn" }
+    ]}
   ],
-  // profilo virtuoso per autofill (tasto F): domande 8 e 12 a polarità invertita
-  AUTOFILL: ["si","si","si","si","si","si","si","no","si","si","si","no"],
-
-  // % aggregate per domanda (fittizie, per la vista BCE) — [sì%, no%]
-  PCT_DOMANDE: [[97,3],[94,6],[81,19],[88,12],[92,8],[78,22],[95,5],[14,86],[84,16],[90,10],[71,29],[9,91]],
+  // profilo virtuoso per autocompilazione (tasto F)
+  AUTOFILL: {
+    A4:"Via dell'Industria 7, 20090 Segrate (MI)", A5:"18", A6:"2.400.000",
+    B1:"84.500", B2:"12.300", B3:"si", B4:"62", B5:"si", B6:"9", B7:"no", B8:"si",
+    C1:"si", C2:"si", C3:"si", C4:"1", C5:"23", C6:"100", C7:"32", C8:"no",
+    D1:"no", D3:"si", E1:"si", E2:"si"
+  },
+  // % aggregate sulle domande sì/no (fittizie, per la reportistica di Vigilanza) — [sì%, no%]
+  AGG: [
+    {id:"B3",si:41,no:59},{id:"B5",si:63,no:37},{id:"B7",si:58,no:42},{id:"B8",si:47,no:53},
+    {id:"C1",si:94,no:6},{id:"C2",si:81,no:19},{id:"C3",si:88,no:12},{id:"C8",si:9,no:91},
+    {id:"D1",si:4,no:96},{id:"D3",si:71,no:29},{id:"E1",si:67,no:33},{id:"E2",si:79,no:21}
+  ],
 
   CLIENTI: [
     ["Rossi Costruzioni S.r.l.","Edilizia","comp",""],
@@ -414,7 +457,7 @@ function statoIniziale(){ return {
   promoMsg: "",
   pec: CONFIG.PMI_PEC, pwd: "",
   pagato: false, pagamentoInCorso: false,
-  risposte: Array(CONFIG.DOMANDE.length).fill(null),
+  risposte: {},          // { "<id domanda>": valore } — sì/no, numeri, testo
   firmato: false, firmaInCorso: false,
   notificaScattata: false,
   ricerca: "", filtro: "tutti",
@@ -432,6 +475,42 @@ stato = statoIniziale();
 
 const NOMI_STEP = ["Comunicazione","Home banking","Clausole","Piano","Carrello","Account","Fatturazione","Pagamento","Questionario","Firma","Dashboard banca","Completato"];
 const N_STEP = 12;
+
+/* ---------- questionario ESG: helper sullo schema a sezioni ---------- */
+const Q_TUTTE = CONFIG.SEZIONI.flatMap(s => s.dom);
+function qAttiva(q){ return !q.cond || stato.risposte[q.cond] === "si"; }   // domanda condizionale: attiva solo se il "padre" è sì
+function qCompilata(q){ const v = stato.risposte[q.id]; return v !== undefined && v !== null && v !== ""; }
+function qConteggio(){
+  let tot = 0, done = 0;
+  for(const q of Q_TUTTE){ if(!qAttiva(q)) continue; tot++; if(qCompilata(q)) done++; }
+  return { done, tot };
+}
+function qValFirma(q){
+  const v = stato.risposte[q.id];
+  if(v === undefined || v === null || v === "") return "—";
+  if(q.tipo === "sn") return v === "si" ? "Sì" : "No";
+  return v + (q.u ? " " + q.u : "");
+}
+function qItem(q){
+  const attivo = qAttiva(q);
+  const v = stato.risposte[q.id];
+  let ctrl;
+  if(q.tipo === "sn"){
+    ctrl = `<div class="toggle">`
+      + `<button class="tg si ${v==='si'?'on':''}" aria-pressed="${v==='si'}" onclick="setSN('${q.id}','si')">Sì</button>`
+      + `<button class="tg no ${v==='no'?'on':''}" aria-pressed="${v==='no'}" onclick="setSN('${q.id}','no')">No</button>`
+      + `</div>`;
+  } else {
+    const ph = q.ph || (q.tipo==="pct" ? "0–100" : q.tipo==="eur" ? "0,00" : "0");
+    const im = q.tipo==="testo" ? "text" : "decimal";
+    const u  = q.u ? `<span class="q-unit">${q.u}</span>` : "";
+    const cls = "q-input" + (q.u?" has-u":"") + (q.tipo==="testo"?" wide":"");
+    ctrl = `<div class="${cls}">`
+      + `<input id="inp-${q.id}" type="text" inputmode="${im}" ${attivo?'':'disabled'} value="${v??''}" placeholder="${ph}" aria-label="${q.t}" oninput="setVal('${q.id}',this.value)">`
+      + u + `</div>`;
+  }
+  return `<div class="q-item ${attivo?'':'cond-off'}" data-q="${q.id}"><div class="testo"><span class="num">${q.id}</span>${q.t}</div>${ctrl}</div>`;
+}
 
 /* ---------- utilità ---------- */
 const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); // separatore migliaia it-IT, indipendente dal locale
@@ -532,26 +611,32 @@ const SCHERMATE = [
 () => `
   <div class="msg-head">
     <div class="logo-banca"><span class="glifo">${BR().glifo}</span>${BR().nome}</div>
-    <span class="badge-imp">Messaggio importante</span>
+    <span class="badge-imp">Azione richiesta</span>
   </div>
   <div class="card msg-card">
     <div class="msg-meta">Da: <b>${BR().nome}, ${CONFIG.BANCA_REPARTO}</b></div>
     <div class="msg-meta">A: ${CONFIG.PMI_NOME}</div>
-    <div class="msg-ogg">Nuovi requisiti ESG-Social: autodichiarazione richiesta entro il ${CONFIG.TERMINE_BANCA_TXT}</div>
+    <div class="msg-ogg">Adempimento ESG-Social: autodichiarazione e attivazione del servizio N2O richieste entro il ${CONFIG.TERMINE_BANCA_TXT}</div>
     <div class="msg-corpo">
       Gentile Cliente,<br><br>
-      in vista dell'applicazione alla Banca degli orientamenti EBA in materia di rischi ESG (GL/2025/01) e in attuazione del D.Lgs. 208/2025, stiamo integrando la valutazione del merito creditizio con informazioni sui profili sociali e di governance, con particolare riferimento alla salute e sicurezza sul lavoro (D.Lgs. 81/08).<br><br>
-      Le chiediamo di completare l'autodichiarazione tramite il servizio erogato dal nostro partner N2O. L'adempimento è fortemente consigliato per:
+      in attuazione degli orientamenti EBA in materia di rischi ESG (GL/2025/01) e degli obblighi connessi alla normativa europea sulla rendicontazione di sostenibilità (CSRD), la Banca è tenuta ad acquisire annualmente le informazioni ESG delle imprese affidate. Per assolvere a questo adempimento, ${BR().breve} ha adottato <b>N2O CSRD-DVR</b>, la piattaforma dedicata alla gestione dei dati di sostenibilità e di sicurezza sul lavoro.<br><br>
+      <b>Il servizio comprende:</b>
       <ul class="motivi">
-        <li>mantenere il rapporto e la linea di credito alle condizioni attuali;</li>
-        <li>mantenere i tassi applicati e agevolare future richieste di finanziamento;</li>
-        <li>accedere al pacchetto annuale N2O per la gestione continuativa degli adempimenti.</li>
+        <li>questionario guidato ESG-Social per la compliance richiesta dalla Vigilanza, ad aggiornamento annuale;</li>
+        <li>report di posizionamento rispetto al benchmark di settore;</li>
+        <li>modulo DVR per l'autovalutazione dei rischi in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08).</li>
       </ul>
-      La compilazione richiede circa 5 minuti.
     </div>
-    <div class="box-scad"><b>Termine di compilazione: ${CONFIG.TERMINE_BANCA_TXT}</b><span>mancano ${giorniA(CONFIG.TERMINE_BANCA)} giorni</span></div>
+    <div class="box-scad" style="background:var(--verde-bg);border-color:#BBDFC9">
+      <b style="color:var(--verde)">Vantaggio per le imprese a norma</b>
+      <span>I dati dichiarati sono verificabili dalla Banca ai fini della valutazione del rischio. Le aziende pienamente a norma potranno accedere a <b>condizioni migliorative</b> e a prodotti di finanziamento dedicati.</span>
+    </div>
+    <div class="msg-corpo" style="margin-top:14px">
+      L'attivazione del servizio è <b>necessaria per il mantenimento delle linee di credito in essere</b>, in coerenza con gli obblighi di vigilanza prudenziale. Condizioni riservate ai clienti ${BR().breve}: € ${CONFIG.PREZZO_MENSILE}/mese oppure € ${CONFIG.PREZZO_ANNUALE}/anno (due mensilità in omaggio).
+    </div>
+    <div class="box-scad"><b>Termine: ${CONFIG.TERMINE_BANCA_TXT}</b><span>mancano ${giorniA(CONFIG.TERMINE_BANCA)} giorni · accesso con le sue credenziali di internet banking · circa 5 minuti</span></div>
     <button class="btn btn-pri" onclick="avanti()">Accedi e completa</button>
-    <div style="font-size:12.5px;color:#5A6B80;margin-top:14px">Servizio erogato in collaborazione con N2O</div>
+    <div style="font-size:12.5px;color:#5A6B80;margin-top:14px">Rinnovo automatico annuale salvo disdetta · servizio erogato in collaborazione con N2O</div>
   </div>`,
 
 /* ---------- 1 · Home banking + notifica ---------- */
@@ -651,7 +736,7 @@ const SCHERMATE = [
         </ul>
       </div>
     </div>
-    <div class="iva-nota">Prezzi IVA inclusa. Rinnovo annuale: la normativa BCE si aggiorna ogni anno.</div>
+    <div class="iva-nota">Prezzi IVA inclusa. Rinnovo annuale: l'adempimento ESG ha cadenza annuale.</div>
     <div style="text-align:center;margin-top:26px">
       <button class="btn btn-pri" ${stato.piano?"":"disabled"} onclick="avanti()">Continua</button>
     </div>
@@ -757,35 +842,28 @@ const SCHERMATE = [
   </div>`;
 },
 
-/* ---------- 8 · Questionario SG ---------- */
+/* ---------- 8 · Questionario ESG-Social ---------- */
 () => {
-  const date = stato.risposte.filter(r=>r!==null).length;
-  const tot = CONFIG.DOMANDE.length;
+  const { done, tot } = qConteggio();
   return `
   <div class="q-head">
-    <div class="logo-banca" style="font-size:16px"><span class="glifo" style="width:28px;height:28px;font-size:14px">${BR().glifo}</span>Autodichiarazione SG</div>
+    <div class="logo-banca" style="font-size:16px"><span class="glifo" style="width:28px;height:28px;font-size:14px">${BR().glifo}</span>Autodichiarazione ESG-Social</div>
     <span style="font-size:13px;color:var(--testo-2)">in collaborazione con N2O · tempo stimato: 5 minuti</span>
   </div>
   <div style="max-width:880px;margin:0 auto;padding:0 24px">
     <div class="q-azienda">
       <span>Ragione sociale: <b>${CONFIG.PMI_NOME}</b></span>
       <span>P.IVA: <b>${CONFIG.PMI_PIVA}</b></span>
+      <span>Sede legale: <b>${CONFIG.PMI_SEDE}</b></span>
       <span>Referente: <b>${CONFIG.PMI_REFERENTE}</b></span>
     </div>
-    <div class="q-prog"><span>Domande completate: ${date} di ${tot}</span><span>${Math.round(date/tot*100)}%</span></div>
-    <div class="q-barra"><div style="width:${date/tot*100}%"></div></div>
+    <div class="q-prog"><span>Campi completati: ${done} di ${tot}</span><span>${tot?Math.round(done/tot*100):0}%</span></div>
+    <div class="q-barra"><div style="width:${tot?done/tot*100:0}%"></div></div>
     <div class="q-lista">
-      ${CONFIG.DOMANDE.map((d,i)=>`
-        <div class="q-item">
-          <div class="testo"><span class="num">${i+1}.</span>${d}</div>
-          <div class="toggle">
-            <button class="tg si ${stato.risposte[i]==='si'?'on':''}" aria-pressed="${stato.risposte[i]==='si'}" onclick="rispondi(${i},'si')">Sì</button>
-            <button class="tg no ${stato.risposte[i]==='no'?'on':''}" aria-pressed="${stato.risposte[i]==='no'}" onclick="rispondi(${i},'no')">No</button>
-          </div>
-        </div>`).join("")}
+      ${CONFIG.SEZIONI.map(sez => `<div class="q-sez">${sez.id} · ${sez.titolo}</div>` + sez.dom.map(qItem).join("")).join("")}
       <div class="q-footer">
-        <button class="btn btn-pri" ${date===tot?"":"disabled"} onclick="avanti()">Genera autodichiarazione</button>
-        <div class="q-dpr">Le risposte fornite costituiscono autodichiarazione ai sensi del D.P.R. 445/2000</div>
+        <button class="btn btn-pri" ${tot && done===tot?"":"disabled"} onclick="avanti()">Genera autodichiarazione</button>
+        <div class="q-dpr">Le dichiarazioni fornite costituiscono autodichiarazione ai sensi del D.P.R. 445/2000</div>
       </div>
     </div>
   </div>`;
@@ -799,7 +877,10 @@ const SCHERMATE = [
       <h3>Autodichiarazione ESG-Social</h3>
       <p><b>${CONFIG.PMI_NOME}</b> · P.IVA ${CONFIG.PMI_PIVA} · ${CONFIG.PMI_SEDE}<br>Referente: ${CONFIG.PMI_REFERENTE}</p>
       <table>
-        ${CONFIG.DOMANDE.map((d,i)=>`<tr><td style="width:30px;text-align:center">${i+1}</td><td>${d}</td><td style="width:46px;text-align:center;font-weight:700">${stato.risposte[i]==='si'?'Sì':'No'}</td></tr>`).join("")}
+        ${CONFIG.SEZIONI.map(sez =>
+          `<tr><td colspan="3" style="background:var(--blu-chiaro);color:var(--blu);font-weight:700">${sez.id} · ${sez.titolo}</td></tr>`
+          + sez.dom.filter(qAttiva).map(q => `<tr><td style="width:34px;text-align:center;font-weight:700">${q.id}</td><td>${q.t}</td><td style="width:96px;text-align:center;font-weight:700">${qValFirma(q)}</td></tr>`).join("")
+        ).join("")}
       </table>
       <div class="firma-box ${stato.firmato?'firmato':''}">
         ${stato.firmato
@@ -878,13 +959,13 @@ const SCHERMATE = [
         </div>
       </div>
       <div class="pannello" style="margin-top:16px">
-        <h3>Percentuali per domanda — dato aggregato <small>media su tutto il portafoglio · è il dato richiesto per la reportistica BCE · invio batch entro il 15–20 del mese successivo</small></h3>
+        <h3>Percentuali per domanda sì/no — dato aggregato <small>media su tutto il portafoglio · è il dato richiesto per la reportistica di Vigilanza · invio batch entro il 15–20 del mese successivo</small></h3>
         <div class="dom-bars">
-          ${CONFIG.PCT_DOMANDE.map((p,i)=>`
+          ${CONFIG.AGG.map(a=>`
             <div class="dom-bar">
-              <span class="n">D${i+1}</span>
-              <div class="traccia"><div class="si" style="width:${p[0]}%"></div><div class="no" style="width:${p[1]}%"></div></div>
-              <span class="pct">${p[0]}% sì · ${p[1]}% no</span>
+              <span class="n">${a.id}</span>
+              <div class="traccia"><div class="si" style="width:${a.si}%"></div><div class="no" style="width:${a.no}%"></div></div>
+              <span class="pct">${a.si}% sì · ${a.no}% no</span>
             </div>`).join("")}
         </div>
       </div>
@@ -942,7 +1023,7 @@ const SCHERMATE = [
         <ul class="vig-lista">
           <li>Autodichiarazioni firmate (PAdES) con marca temporale — ${fmt(CONFIG.N_RICEVUTE + (stato.notificaScattata?1:0))} documenti</li>
           <li>Registro consegne con protocollo e data certa</li>
-          <li>KPI aggregati per domanda (formato reportistica BCE)</li>
+          <li>KPI aggregati per domanda (formato reportistica di Vigilanza)</li>
           <li>Log dei solleciti e delle escalation</li>
           <li>Attestazione di immutabilità dei documenti (12 mesi)</li>
         </ul>
@@ -976,20 +1057,32 @@ const SCHERMATE = [
    AZIONI
    ============================================================ */
 /* aggiornamento chirurgico: niente re-render completo, così scroll e focus restano dove sono */
-function rispondi(i,v){
-  stato.risposte[i] = v;
-  const item = document.querySelectorAll(".q-item")[i];
+function setSN(id,v){
+  stato.risposte[id] = v;
+  const item = document.querySelector('.q-item[data-q="'+id+'"]');
   if(!item){ render(); return; }
   const si = item.querySelector(".tg.si"), no = item.querySelector(".tg.no");
   si.classList.toggle("on", v==="si"); si.setAttribute("aria-pressed", v==="si");
   no.classList.toggle("on", v==="no"); no.setAttribute("aria-pressed", v==="no");
-  const date = stato.risposte.filter(r=>r!==null).length, tot = CONFIG.DOMANDE.length;
+  // abilita / azzera le domande condizionali figlie ("se sì…")
+  Q_TUTTE.filter(c => c.cond===id).forEach(c => {
+    const ci = document.querySelector('.q-item[data-q="'+c.id+'"]');
+    const inp = document.getElementById("inp-"+c.id);
+    const att = v==="si";
+    if(ci) ci.classList.toggle("cond-off", !att);
+    if(inp){ inp.disabled = !att; if(!att){ inp.value=""; delete stato.risposte[c.id]; } }
+  });
+  aggProg();
+}
+function setVal(id,v){ if(v==="") delete stato.risposte[id]; else stato.risposte[id] = v; aggProg(); }
+function aggProg(){
+  const { done, tot } = qConteggio();
   const prog = document.querySelector(".q-prog");
-  if(prog) prog.innerHTML = `<span>Domande completate: ${date} di ${tot}</span><span>${Math.round(date/tot*100)}%</span>`;
+  if(prog) prog.innerHTML = `<span>Campi completati: ${done} di ${tot}</span><span>${tot?Math.round(done/tot*100):0}%</span>`;
   const barra = document.querySelector(".q-barra div");
-  if(barra) barra.style.width = (date/tot*100)+"%";
+  if(barra) barra.style.width = (tot?done/tot*100:0)+"%";
   const btn = document.querySelector(".q-footer .btn");
-  if(btn) btn.disabled = date !== tot;
+  if(btn) btn.disabled = !(tot && done===tot);
 }
 function righeTabella(){
   const filtroOk = (s)=> stato.filtro==="tutti" || s===stato.filtro;
@@ -1067,7 +1160,7 @@ document.addEventListener("keydown", e=>{
       stato.pwd = "AuroraDemo2026"; render();
       toast("Credenziali precompilate (regia)");
     } else {
-      stato.risposte = CONFIG.AUTOFILL.slice();
+      stato.risposte = {...CONFIG.AUTOFILL};
       if(stato.step===8) render();
       toast("Questionario autocompilato (profilo virtuoso)");
     }
@@ -1088,7 +1181,7 @@ document.addEventListener("keydown", e=>{
   if(stato.step>=4 && !stato.piano) stato.piano="annuale";
   if(stato.step>=6 && stato.pwd.length<8) stato.pwd="demo12345";
   if(stato.step>=8 && !stato.pagato) stato.pagato=true;
-  if(stato.step>=9 && stato.risposte[0]===null) stato.risposte=CONFIG.AUTOFILL.slice();
+  if(stato.step>=9 && !Object.keys(stato.risposte).length) stato.risposte={...CONFIG.AUTOFILL};
   if(stato.step>=10 && !stato.firmato) stato.firmato=true;
   render();
 })();
