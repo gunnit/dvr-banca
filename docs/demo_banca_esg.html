@@ -377,7 +377,7 @@ const CONFIG = {
   PROTOCOLLO: "AUR-2026-004217",
 
   // [PLACEHOLDER CLAUSOLE AVVOCATO — incl. disdetta piano mensile, in arrivo dal legale di Luca]
-  CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 30 settembre 2026. Il servizio è erogato da N2O in collaborazione con la Banca, con piano annuale o mensile. Il piano mensile costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
+  CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 30 settembre 2026. Il servizio è erogato da N2O srl in collaborazione con la Banca, con piano annuale o mensile. Il piano mensile costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
 
   // [Questionario ESG-Social — contenuto definitivo fornito dalla banca]
   // A1 "Ragione sociale" è raccolta nella pagina Dati di fatturazione e mostrata in intestazione: non si ripete qui.
@@ -463,7 +463,7 @@ function statoIniziale(){ return {
   ricerca: "", filtro: "tutti",
   flashRiga: false,
   brandAlt: false,
-  simAdesione: 68, simQuota: 10,
+  simAdesione: 68, simQuota: 40,
   pannelloSoll: null, modalVigilanza: false
 };}
 function BR(){
@@ -616,10 +616,10 @@ const SCHERMATE = [
   <div class="card msg-card">
     <div class="msg-meta">Da: <b>${BR().nome}, ${CONFIG.BANCA_REPARTO}</b></div>
     <div class="msg-meta">A: ${CONFIG.PMI_NOME}</div>
-    <div class="msg-ogg">Adempimento ESG-Social: autodichiarazione e attivazione del servizio N2O richieste entro il ${CONFIG.TERMINE_BANCA_TXT}</div>
+    <div class="msg-ogg">Adempimento ESG-Social: autodichiarazione e attivazione del servizio N2O srl richieste entro il ${CONFIG.TERMINE_BANCA_TXT}</div>
     <div class="msg-corpo">
       Gentile Cliente,<br><br>
-      in attuazione degli orientamenti EBA in materia di rischi ESG (GL/2025/01) e degli obblighi connessi alla normativa europea sulla rendicontazione di sostenibilità (CSRD), la Banca è tenuta ad acquisire annualmente le informazioni ESG delle imprese affidate. Per assolvere a questo adempimento, ${BR().breve} ha adottato <b>N2O CSRD-DVR</b>, la piattaforma dedicata alla gestione dei dati di sostenibilità e di sicurezza sul lavoro.<br><br>
+      in attuazione degli orientamenti EBA in materia di rischi ESG (GL/2025/01) e degli obblighi connessi alla normativa europea sulla rendicontazione di sostenibilità (CSRD), la Banca è tenuta ad acquisire annualmente le informazioni ESG delle imprese affidate. Per assolvere a questo adempimento, ${BR().breve} ha adottato <b>N2O srl CSRD-DVR</b>, la piattaforma dedicata alla gestione dei dati di sostenibilità e di sicurezza sul lavoro.<br><br>
       <b>Il servizio comprende:</b>
       <ul class="motivi">
         <li>questionario guidato ESG-Social per la compliance richiesta dalla Vigilanza, ad aggiornamento annuale;</li>
@@ -636,7 +636,7 @@ const SCHERMATE = [
     </div>
     <div class="box-scad"><b>Termine: ${CONFIG.TERMINE_BANCA_TXT}</b><span>mancano ${giorniA(CONFIG.TERMINE_BANCA)} giorni · accesso con le sue credenziali di internet banking · circa 5 minuti</span></div>
     <button class="btn btn-pri" onclick="avanti()">Accedi e completa</button>
-    <div style="font-size:12.5px;color:#5A6B80;margin-top:14px">Rinnovo automatico annuale salvo disdetta · servizio erogato in collaborazione con N2O</div>
+    <div style="font-size:12.5px;color:#5A6B80;margin-top:14px">Rinnovo automatico annuale salvo disdetta · servizio erogato in collaborazione con N2O srl</div>
   </div>`,
 
 /* ---------- 1 · Home banking + notifica ---------- */
@@ -848,7 +848,7 @@ const SCHERMATE = [
   return `
   <div class="q-head">
     <div class="logo-banca" style="font-size:16px"><span class="glifo" style="width:28px;height:28px;font-size:14px">${BR().glifo}</span>Autodichiarazione ESG-Social</div>
-    <span style="font-size:13px;color:var(--testo-2)">in collaborazione con N2O · tempo stimato: 5 minuti</span>
+    <span style="font-size:13px;color:var(--testo-2)">in collaborazione con N2O srl · tempo stimato: 5 minuti</span>
   </div>
   <div style="max-width:880px;margin:0 auto;padding:0 24px">
     <div class="q-azienda">
@@ -873,7 +873,7 @@ const SCHERMATE = [
 () => `
   <div class="split">
     <div class="doc-prev">
-      <div class="d-head"><span>${BR().nome}</span><span>N2O</span></div>
+      <div class="d-head"><span>${BR().nome}</span><span>N2O srl</span></div>
       <h3>Autodichiarazione ESG-Social</h3>
       <p><b>${CONFIG.PMI_NOME}</b> · P.IVA ${CONFIG.PMI_PIVA} · ${CONFIG.PMI_SEDE}<br>Referente: ${CONFIG.PMI_REFERENTE}</p>
       <table>
@@ -976,11 +976,11 @@ const SCHERMATE = [
             <label>Tasso di adesione del portafoglio: <b id="lblAd">${stato.simAdesione}%</b></label>
             <input type="range" min="10" max="100" step="1" value="${stato.simAdesione}" oninput="stato.simAdesione=+this.value;aggiornaSim()">
             <label style="margin-top:14px">Quota provvigione banca: <b id="lblQuota">${stato.simQuota}%</b></label>
-            <input type="range" min="5" max="25" step="1" value="${stato.simQuota}" oninput="stato.simQuota=+this.value;aggiornaSim()">
+            <input type="range" min="5" max="50" step="1" value="${stato.simQuota}" oninput="stato.simQuota=+this.value;aggiornaSim()">
           </div>
           <div class="sim-kpi"><div class="v" id="simClienti">${fmt(Math.round(CONFIG.N_CORPORATE*stato.simAdesione/100))}</div><div class="l">clienti aderenti su ${fmt(CONFIG.N_CORPORATE)}</div></div>
           <div class="sim-kpi"><div class="v" id="simRicavo">€ ${fmt(Math.round(CONFIG.N_CORPORATE*stato.simAdesione/100*139.99*stato.simQuota/100))}</div><div class="l">provvigioni stimate / anno</div></div>
-          <div class="sim-kpi"><div class="v" style="color:#7FD7A8">−30/40%</div><div class="l">probabilità di default attesa per imprese con presidi SSL strutturati (stima N2O su studi di settore)</div></div>
+          <div class="sim-kpi"><div class="v" style="color:#7FD7A8">−30/40%</div><div class="l">probabilità di default attesa per imprese con presidi SSL strutturati (stima N2O srl su studi di settore)</div></div>
         </div>
       </div>
       <div class="pannello db-tab-wrap">
@@ -1001,7 +1001,7 @@ const SCHERMATE = [
           <thead><tr><th>Ragione sociale</th><th>Segmento</th><th>Stato</th><th>Data ricezione</th></tr></thead>
           <tbody id="tbodyClienti">${righe || '<tr><td colspan="4" style="color:#8FA8C2">Nessun risultato</td></tr>'}</tbody>
         </table>
-        <div class="db-note">Credenziali banca dedicate sul portale N2O · solleciti gestiti automaticamente dal sistema (clicchi su un cliente "Sollecitata" per il dettaglio) · Hosting EU (Francoforte) · GDPR · firma e marca temporale conformi eIDAS</div>
+        <div class="db-note">Credenziali banca dedicate sul portale N2O srl · solleciti gestiti automaticamente dal sistema (clicchi su un cliente "Sollecitata" per il dettaglio) · Hosting EU (Francoforte) · GDPR · firma e marca temporale conformi eIDAS</div>
         <button class="btn-ghost" onclick="vai(11)">Torna alla vista PMI →</button>
       </div>
     </div>
