@@ -135,8 +135,20 @@ label.lbl{display:block;font-size:13.5px;font-weight:600;color:var(--testo-2);ma
 .piano .prezzo{font-size:34px;font-weight:800;color:var(--blu)}
 .piano .prezzo small{font-size:15px;font-weight:600;color:var(--testo-2)}
 .piano ul{list-style:none;margin-top:16px;font-size:14px;color:var(--testo-2);line-height:1.9}
-.piano ul li::before{content:"✓";color:var(--verde);font-weight:700;margin-right:8px}
-.iva-nota{text-align:center;font-size:12.5px;color:#5A6B80;margin-top:16px}
+.piano ul li{display:flex;gap:8px;align-items:flex-start;line-height:1.55;margin-bottom:6px}
+.piano ul li::before{content:"✓";color:var(--verde);font-weight:700;flex-shrink:0}
+.iva-nota{text-align:center;font-size:12.5px;color:#5A6B80;margin-top:16px;line-height:1.55}
+.centro.largo{max-width:1100px}
+.piano .prezzo-sub{font-size:13px;font-weight:600;color:var(--testo-2);margin-top:4px}
+.pag-switch{display:flex;justify-content:center;margin-top:22px}
+.pag-switch button{font-family:inherit;font-size:14px;font-weight:600;color:var(--testo-2);background:#fff;border:1px solid var(--bordo);padding:9px 20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;transition:all .15s}
+.pag-switch button small{font-size:11.5px;font-weight:500;opacity:.85}
+.pag-switch button:first-child{border-radius:10px 0 0 10px}
+.pag-switch button:last-child{border-radius:0 10px 10px 0;margin-left:-1px}
+.pag-switch button.on{background:var(--blu);border-color:var(--blu);color:#fff}
+.piano-custom{text-align:center;font-size:14px;color:var(--testo-2);margin-top:22px;padding:12px 16px;border:1px dashed var(--bordo);border-radius:10px;max-width:640px;margin-left:auto;margin-right:auto}
+.sim-ctrl select{width:100%;background:#0E2238;border:1px solid #1E3A55;color:#DCE6F0;border-radius:8px;padding:8px 12px;font-size:13px;font-family:inherit;margin-top:2px}
+.sim-ctrl select:focus{border-color:#5C9CE0;box-shadow:0 0 0 3px rgba(92,156,224,.18);outline:none}
 
 /* ---------- 5 carrello ---------- */
 .riepilogo{padding:26px 30px}
@@ -372,12 +384,22 @@ const CONFIG = {
   DATA_EBA: new Date(2027, 0, 11),        // 11 gennaio 2027 — applicazione EBA GL/2025/01 (banche SNCI). NON è scadenza clienti.
   TERMINE_BANCA: new Date(2026, 8, 30),    // 30 settembre 2026 — termine fissato dalla banca, configurabile
   TERMINE_BANCA_TXT: "30 settembre 2026",
-  PREZZO_MENSILE: "13,99", PREZZO_ANNUALE: "139,99",
+  // Listino N2O S.r.l. "PER AZIENDE" (documento del 25/08/2026, trasmesso da Luca Marchetti il 02/10/2026 — oggetto "PREZZIARIO").
+  // Prezzi IVA esclusa. Pagamento unico annuale (pari a 10 mensilità) oppure 12 rate mensili (impegno annuale).
+  // Il listino indica, per ogni piano, prezzo e crediti AI inclusi: altre differenze fra i piani vanno confermate con N2O.
+  IVA: 22,
+  PIANI: [
+    { id:"core",  nome:"Core",  unico:499.00, rata:49.90, crediti:1000 },
+    { id:"nexus", nome:"Nexus", unico:699.00, rata:69.90, crediti:3000 },
+    { id:"apex",  nome:"Apex",  unico:999.00, rata:99.90, crediti:6500 }
+  ],
+  // Ricariche crediti AI (listino "PACCHETTI PER ACQUISTO CREDITI AI", IVA esclusa): [crediti, prezzo]
+  PACCHETTI_CREDITI: [[500,29.90],[1500,89.90],[3000,169.90],[6000,289.90],[12000,519.00],[25000,949.00],[50000,1749.00],[100000,3399.00]],
   N_CORPORATE: 3412, N_RICEVUTE: 2318, N_COMPILAZIONE: 540, N_SOLLECITATE: 412, N_NONAVVIATE: 142,
   PROTOCOLLO: "AUR-2026-004217",
 
   // [PLACEHOLDER CLAUSOLE AVVOCATO — incl. disdetta piano mensile, in arrivo dal legale di Luca]
-  CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 30 settembre 2026. Il servizio è erogato da N2O S.r.l. in collaborazione con la Banca, con piano annuale o mensile. Il piano mensile costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
+  CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 30 settembre 2026. Il servizio è erogato da N2O S.r.l. in collaborazione con la Banca, con pagamento in unica soluzione annuale oppure in 12 rate mensili. Il pagamento rateale costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
 
   // [Questionario ESG-Social — contenuto definitivo fornito dalla banca]
   // A1 "Ragione sociale" è raccolta nella pagina Dati di fatturazione e mostrata in intestazione: non si ripete qui.
@@ -453,7 +475,8 @@ function statoIniziale(){ return {
   step: 0,
   bonificoEseguito: false,
   consensi: [false,false,false],
-  piano: null,            // 'mensile' | 'annuale'
+  piano: null,            // id del piano scelto: 'core' | 'nexus' | 'apex'
+  pagamento: "unico",     // 'unico' (annuale) | 'rate' (12 rate mensili)
   promoMsg: "",
   pec: CONFIG.PMI_PEC, pwd: "",
   pagato: false, pagamentoInCorso: false,
@@ -463,7 +486,7 @@ function statoIniziale(){ return {
   ricerca: "", filtro: "tutti",
   flashRiga: false,
   brandAlt: false,
-  simAdesione: 68, simQuota: 40,
+  simAdesione: 68, simQuota: 40, simPiano: "core",
   pannelloSoll: null, modalVigilanza: false
 };}
 function BR(){
@@ -514,6 +537,16 @@ function qItem(q){
 
 /* ---------- utilità ---------- */
 const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); // separatore migliaia it-IT, indipendente dal locale
+/* importi: formato "€ 1.234,56"; IVA calcolata e arrotondata al centesimo sull'importo fatturato (la rata, se rateizzato) */
+function eur(n){ const [i,d] = Number(n).toFixed(2).split("."); return "€ " + fmt(i) + "," + d; }
+function ivaDi(n){ return Math.round(n * CONFIG.IVA) / 100; }
+function conIva(n){ return Math.round((n + ivaDi(n)) * 100) / 100; }
+function pianoScelto(){ return CONFIG.PIANI.find(p => p.id === stato.piano) || CONFIG.PIANI[0]; }
+function simRicavo(){
+  const p = CONFIG.PIANI.find(x => x.id === stato.simPiano) || CONFIG.PIANI[0];
+  const clienti = Math.round(CONFIG.N_CORPORATE * stato.simAdesione / 100);
+  return Math.round(clienti * p.unico * stato.simQuota / 100);   // su imponibile, pagamento unico
+}
 function giorniA(d){ return Math.max(0, Math.ceil((d - new Date())/86400000)); }
 function oggi(){ return new Date().toLocaleDateString("it-IT"); }
 function adesso(){ return new Date().toLocaleString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}); }
@@ -632,7 +665,7 @@ const SCHERMATE = [
       <span>I dati dichiarati sono verificabili dalla Banca ai fini della valutazione del rischio. Le aziende pienamente a norma potranno accedere a <b>condizioni migliorative</b> e a prodotti di finanziamento dedicati.</span>
     </div>
     <div class="msg-corpo" style="margin-top:14px">
-      L'attivazione del servizio è <b>necessaria per il mantenimento delle linee di credito in essere</b>, in coerenza con gli obblighi di vigilanza prudenziale. Condizioni riservate ai clienti ${BR().breve}: € ${CONFIG.PREZZO_MENSILE}/mese oppure € ${CONFIG.PREZZO_ANNUALE}/anno (due mensilità in omaggio).
+      L'attivazione del servizio è <b>necessaria per il mantenimento delle linee di credito in essere</b>, in coerenza con gli obblighi di vigilanza prudenziale. Condizioni per i clienti ${BR().breve}: abbonamento annuale N2O S.r.l. a partire da ${eur(CONFIG.PIANI[0].unico)} + IVA in unica soluzione (pari a 10 mensilità) oppure da ${eur(CONFIG.PIANI[0].rata)} + IVA al mese in 12 rate.
     </div>
     <div class="box-scad"><b>Termine: ${CONFIG.TERMINE_BANCA_TXT}</b><span>mancano ${giorniA(CONFIG.TERMINE_BANCA)} giorni · accesso con le sue credenziali di internet banking · circa 5 minuti</span></div>
     <button class="btn btn-pri" onclick="avanti()">Accedi e completa</button>
@@ -702,7 +735,7 @@ const SCHERMATE = [
       <label class="check-riga"><input type="checkbox" ${stato.consensi[0]?"checked":""} onchange="stato.consensi[0]=this.checked;render()"><span>Accetto i <b>termini e condizioni</b> e le <b>regole di utilizzo</b> del servizio</span></label>
       <label class="check-riga"><input type="checkbox" ${stato.consensi[1]?"checked":""} onchange="stato.consensi[1]=this.checked;render()"><span>Ho letto l'<b>informativa sulla privacy</b></span></label>
       <label class="check-riga"><input type="checkbox" ${stato.consensi[2]?"checked":""} onchange="stato.consensi[2]=this.checked;render()"><span>Ho letto e compreso le clausole sopra riportate</span></label>
-      <div class="nota-rimborso">Il servizio non prevede politica di rimborso. Il piano mensile costituisce rateizzazione di un impegno annuale.</div>
+      <div class="nota-rimborso">Il servizio non prevede politica di rimborso. Il pagamento in 12 rate costituisce rateizzazione di un impegno annuale.</div>
       <button class="btn btn-pri" ${tutti?"":"disabled"} onclick="avanti()" style="width:100%">Prosegui (5 minuti)</button>
       <button class="btn btn-sec" style="width:100%;margin-top:10px" onclick="stato.bonificoEseguito=true;vai(1);toast('Promemoria salvato. Troverà l\\'avviso al prossimo accesso.')">Ricordamelo al prossimo accesso</button>
     </div>
@@ -710,52 +743,61 @@ const SCHERMATE = [
 },
 
 /* ---------- 3 · Scelta del piano ---------- */
-() => `
-  <div class="centro">
+() => {
+  const rate = stato.pagamento === 'rate';
+  const pc = CONFIG.PACCHETTI_CREDITI, p0 = pc[0], pN = pc[pc.length-1];
+  return `
+  <div class="centro largo">
     ${chipPassi(3)}
     <h1>Scelga il suo piano</h1>
-    <p class="sottotitolo" style="margin-bottom:4px">Autodichiarazione ESG-Social con firma digitale e valore legale, richiesta annualmente.</p>
-    <div class="piani">
-      <div class="piano ${stato.piano==='mensile'?'scelto':''}" tabindex="0" role="button" aria-pressed="${stato.piano==='mensile'}" onclick="stato.piano='mensile';render()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();stato.piano='mensile';render()}">
-        <h3>Piano mensile</h3>
-        <div class="prezzo">€ ${CONFIG.PREZZO_MENSILE}<small>/mese</small></div>
-        <ul>
-          <li>12 rate mensili (impegno annuale)</li>
-          <li>Rateizzazione tramite partner dedicato</li>
-          <li>Fattura elettronica mensile</li>
-        </ul>
-      </div>
-      <div class="piano ${stato.piano==='annuale'?'scelto':''}" tabindex="0" role="button" aria-pressed="${stato.piano==='annuale'}" onclick="stato.piano='annuale';render()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();stato.piano='annuale';render()}">
-        <span class="tag">Consigliato — 2 mensilità di sconto</span>
-        <h3>Piano annuale</h3>
-        <div class="prezzo">€ ${CONFIG.PREZZO_ANNUALE}<small>/anno</small></div>
-        <ul>
-          <li>Pagamento unico</li>
-          <li>Rinnovo annuale</li>
-          <li>Fattura elettronica immediata</li>
-        </ul>
-      </div>
+    <p class="sottotitolo" style="margin-bottom:4px">Abbonamento annuale N2O S.r.l. Ogni piano comprende l'autodichiarazione ESG-Social con firma digitale e valore legale, richiesta annualmente, e il modulo DVR (D.Lgs. 81/08).</p>
+    <div class="pag-switch" role="radiogroup" aria-label="Modalità di pagamento">
+      <button type="button" class="${rate?'':'on'}" role="radio" aria-checked="${!rate}" onclick="stato.pagamento='unico';render()">Pagamento unico <small>2 mensilità di sconto</small></button>
+      <button type="button" class="${rate?'on':''}" role="radio" aria-checked="${rate}" onclick="stato.pagamento='rate';render()">12 rate mensili <small>impegno annuale</small></button>
     </div>
-    <div class="iva-nota">Prezzi IVA inclusa. Rinnovo annuale: l'adempimento ESG ha cadenza annuale.</div>
+    <div class="piani">
+      ${CONFIG.PIANI.map(p => `
+      <div class="piano ${stato.piano===p.id?'scelto':''}" tabindex="0" role="button" aria-pressed="${stato.piano===p.id}" onclick="stato.piano='${p.id}';render()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();stato.piano='${p.id}';render()}">
+        <h3>Piano ${p.nome}</h3>
+        ${rate
+          ? `<div class="prezzo">${eur(p.rata)}<small> + IVA</small></div><div class="prezzo-sub">al mese, 12 rate · ${eur(p.rata*12)} + IVA all'anno</div>`
+          : `<div class="prezzo">${eur(p.unico)}<small> + IVA</small></div><div class="prezzo-sub">all'anno, pagamento unico · pari a 10 rate da ${eur(p.rata)}</div>`}
+        <ul>
+          <li>Autodichiarazione ESG-Social firmata digitalmente</li>
+          <li>Modulo DVR — valutazione dei rischi D.Lgs. 81/08</li>
+          <li><b>${fmt(p.crediti)} crediti AI</b> inclusi all'anno</li>
+          <li>${rate ? 'Fattura elettronica mensile, a ogni rata' : 'Fattura elettronica unica, immediata'}</li>
+        </ul>
+      </div>`).join("")}
+    </div>
+    <div class="piano-custom">Esigenze particolari? È disponibile un piano <b>Custom</b>, su misura, da definire con un consulente N2O S.r.l.</div>
+    <div class="iva-nota">Prezzi IVA esclusa (aliquota ${CONFIG.IVA}%). Rinnovo annuale automatico salvo disdetta: l'adempimento ESG ha cadenza annuale. Il pagamento in 12 rate costituisce rateizzazione dell'impegno annuale.<br>Crediti AI aggiuntivi acquistabili in piattaforma: pacchetti da ${fmt(p0[0])} crediti (${eur(p0[1])} + IVA) a ${fmt(pN[0])} crediti (${eur(pN[1])} + IVA).</div>
     <div style="text-align:center;margin-top:26px">
       <button class="btn btn-pri" ${stato.piano?"":"disabled"} onclick="avanti()">Continua</button>
     </div>
-  </div>`,
+  </div>`;
+},
 
 /* ---------- 4 · Carrello ---------- */
 () => {
-  const annuale = stato.piano !== 'mensile';
-  const prezzo = annuale ? "€ "+CONFIG.PREZZO_ANNUALE : "€ "+CONFIG.PREZZO_MENSILE+" × 12 rate";
-  const tot = annuale ? "€ "+CONFIG.PREZZO_ANNUALE : "€ "+CONFIG.PREZZO_MENSILE+" oggi";
+  const p = pianoScelto();
+  const rate = stato.pagamento === 'rate';
+  // impegno annuale: imponibile e IVA come verranno fatturati (12 fatture mensili se rateizzato, una sola se pagamento unico)
+  const imponibile = rate ? Math.round(p.rata * 12 * 100) / 100 : p.unico;
+  const iva = rate ? Math.round(ivaDi(p.rata) * 12 * 100) / 100 : ivaDi(p.unico);
+  const totale = Math.round((imponibile + iva) * 100) / 100;
   return `
   <div class="centro-s">
     ${chipPassi(4)}
     <h1 style="margin-bottom:18px">Carrello</h1>
     <div class="card riepilogo">
-      <div class="r-riga"><span>Autodichiarazione ESG-Social — ${annuale?'piano annuale':'piano mensile (12 rate)'}</span><b>${prezzo}</b></div>
+      <div class="r-riga"><span>Piano ${p.nome} — ${rate ? '12 rate mensili (impegno annuale)' : 'pagamento unico annuale'}</span><b>${rate ? eur(p.rata)+' × 12' : eur(p.unico)}</b></div>
       <div class="r-riga"><span>Quantità</span><b>1 — P.IVA ${CONFIG.PMI_PIVA}</b></div>
-      <div class="r-riga"><span>Firma digitale e marca temporale</span><b>inclusi</b></div>
-      <div class="r-riga tot"><span>Totale ${annuale?'':'(prima rata)'}</span><span>${tot}</span></div>
+      <div class="r-riga"><span>Autodichiarazione ESG-Social, firma digitale e marca temporale</span><b>inclusi</b></div>
+      <div class="r-riga"><span>Imponibile annuo</span><b>${eur(imponibile)}</b></div>
+      <div class="r-riga"><span>IVA ${CONFIG.IVA}%</span><b>${eur(iva)}</b></div>
+      <div class="r-riga tot"><span>Totale annuo${rate ? ' (12 rate da '+eur(conIva(p.rata))+')' : ''}</span><span>${eur(totale)}</span></div>
+      ${rate ? `<div class="r-riga" style="border:none;padding-top:0;font-size:14px;color:var(--testo-2)"><span>Oggi viene addebitata la prima rata, IVA inclusa</span><b>${eur(conIva(p.rata))}</b></div>` : ``}
       <div class="promo">
         <input type="text" id="promoInput" placeholder="Codice promozionale (monouso)">
         <button class="btn btn-sec" onclick="toast('Ambiente demo: codici promozionali disattivati.')">Applica</button>
@@ -811,13 +853,14 @@ const SCHERMATE = [
 
 /* ---------- 7 · Pagamento ---------- */
 () => {
-  const annuale = stato.piano !== 'mensile';
-  const importo = annuale ? CONFIG.PREZZO_ANNUALE : CONFIG.PREZZO_MENSILE;
+  const p = pianoScelto();
+  const rate = stato.pagamento === 'rate';
+  const importo = conIva(rate ? p.rata : p.unico);   // addebito di oggi, IVA inclusa
   if(stato.pagato) return `
   <div class="centro-s" style="text-align:center;padding-top:70px">
     <div class="spunta-anim"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1 style="font-size:26px;margin:22px 0 8px">Pagamento completato</h1>
-    <p style="color:var(--testo-2)">Transazione n. TRX-2026-118402 · € ${importo}${annuale?"":" (prima di 12 rate)"}</p>
+    <p style="color:var(--testo-2)">Transazione n. TRX-2026-118402 · Piano ${p.nome} · ${eur(importo)} IVA inclusa${rate?" (prima di 12 rate)":""}</p>
     <p style="color:var(--testo-2);font-size:14.5px;margin-top:10px">Fattura elettronica inviata tramite SDI · copia di cortesia sulla sua PEC</p>
     <button class="btn btn-pri" style="margin-top:28px" onclick="avanti()">Compila il questionario</button>
   </div>`;
@@ -836,8 +879,8 @@ const SCHERMATE = [
       <div class="campo"><label class="lbl">Intestatario</label><input type="text" value="Mario Rossi"></div>
       ${stato.pagamentoInCorso
         ? `<div style="text-align:center;padding:14px 0"><div class="spinner"></div><div style="font-size:13.5px;color:var(--testo-2);margin-top:12px">Autorizzazione in corso…</div></div>`
-        : `<button class="btn btn-pri" style="width:100%" onclick="pagaOra()">Paga € ${importo}</button>
-           <div style="font-size:12px;color:#5A6B80;text-align:center;margin-top:10px">${annuale?"Pagamento unico annuale":"Rateizzazione: 12 rate mensili tramite partner dedicato"} · carte di credito, debito e ricaricabili</div>`}
+        : `<button class="btn btn-pri" style="width:100%" onclick="pagaOra()">Paga ${eur(importo)}</button>
+           <div style="font-size:12px;color:#5A6B80;text-align:center;margin-top:10px">${rate ? "Prima di 12 rate mensili da "+eur(p.rata)+" + IVA, tramite partner dedicato" : "Pagamento unico annuale: "+eur(p.unico)+" + IVA "+CONFIG.IVA+"%"} · carte di credito, debito e ricaricabili</div>`}
     </div>
   </div>`;
 },
@@ -970,16 +1013,20 @@ const SCHERMATE = [
         </div>
       </div>
       <div class="pannello" style="margin-top:16px">
-        <h3>Simulatore ricavi per la Banca <small>commissioni sulla prima adesione di ogni cliente · stima illustrativa, parametri da definire in convenzione · prezzi IVA inclusa</small></h3>
+        <h3>Simulatore ricavi per la Banca <small>commissioni sulla prima adesione di ogni cliente · stima illustrativa, parametri da definire in convenzione · importi IVA esclusa, listino N2O S.r.l.</small></h3>
         <div class="sim-grid">
           <div class="sim-ctrl">
             <label>Tasso di adesione del portafoglio: <b id="lblAd">${stato.simAdesione}%</b></label>
             <input type="range" min="10" max="100" step="1" value="${stato.simAdesione}" oninput="stato.simAdesione=+this.value;aggiornaSim()">
             <label style="margin-top:14px">Quota provvigione banca: <b id="lblQuota">${stato.simQuota}%</b></label>
             <input type="range" min="5" max="50" step="1" value="${stato.simQuota}" oninput="stato.simQuota=+this.value;aggiornaSim()">
+            <label style="margin-top:14px" for="simPiano">Piano di riferimento (pagamento unico)</label>
+            <select id="simPiano" onchange="stato.simPiano=this.value;aggiornaSim()">
+              ${CONFIG.PIANI.map(p=>`<option value="${p.id}" ${stato.simPiano===p.id?'selected':''}>${p.nome} — ${eur(p.unico)} + IVA</option>`).join("")}
+            </select>
           </div>
           <div class="sim-kpi"><div class="v" id="simClienti">${fmt(Math.round(CONFIG.N_CORPORATE*stato.simAdesione/100))}</div><div class="l">clienti aderenti su ${fmt(CONFIG.N_CORPORATE)}</div></div>
-          <div class="sim-kpi"><div class="v" id="simRicavo">€ ${fmt(Math.round(CONFIG.N_CORPORATE*stato.simAdesione/100*139.99*stato.simQuota/100))}</div><div class="l">provvigioni stimate / anno</div></div>
+          <div class="sim-kpi"><div class="v" id="simRicavo">€ ${fmt(simRicavo())}</div><div class="l">provvigioni stimate / anno · sull'imponibile (IVA esclusa)</div></div>
           <div class="sim-kpi"><div class="v" style="color:#7FD7A8">−30/40%</div><div class="l">probabilità di default attesa per imprese con presidi SSL strutturati (stima N2O S.r.l. su studi di settore)</div></div>
         </div>
       </div>
@@ -1100,7 +1147,7 @@ function apriSollecito(nome){ stato.pannelloSoll = nome; render(); }
 function aggiornaSim(){
   const ad = stato.simAdesione, q = stato.simQuota;
   const clienti = Math.round(CONFIG.N_CORPORATE * ad / 100);
-  const ricavo = Math.round(clienti * 139.99 * q / 100);
+  const ricavo = simRicavo();
   const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
   set("lblAd", ad + "%"); set("lblQuota", q + "%");
   set("simClienti", fmt(clienti)); set("simRicavo", "€ " + fmt(ricavo));
@@ -1178,14 +1225,14 @@ document.addEventListener("keydown", e=>{
   if(/[?&]vig=1/.test(location.search)) stato.modalVigilanza = true;
   if(/[?&]soll=1/.test(location.search)) stato.pannelloSoll = "Trasporti Bellini S.r.l.";
   // prepara stato coerente se si parte avanti
-  if(stato.step>=4 && !stato.piano) stato.piano="annuale";
+  if(stato.step>=4 && !stato.piano) stato.piano="core";
   if(stato.step>=6 && stato.pwd.length<8) stato.pwd="demo12345";
   if(stato.step>=8 && !stato.pagato) stato.pagato=true;
   if(stato.step>=9 && !Object.keys(stato.risposte).length) stato.risposte={...CONFIG.AUTOFILL};
   if(stato.step>=10 && !stato.firmato) stato.firmato=true;
   render();
 })();
-/* build 11-giu-2026 — revisione 16:00 */
+/* build 11-giu-2026 — revisione 16:00 · 13-ott-2026: listino N2O (PER AZIENDE, 25/08/2026) al posto dei prezzi 13,99/139,99 */
 </script>
 </body>
 </html>
