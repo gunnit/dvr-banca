@@ -382,8 +382,8 @@ const CONFIG = {
   PMI_PEC: "rossicostruzioni@pec.it",
   PMI_SDI: "M5UXCR1",
   DATA_EBA: new Date(2027, 0, 11),        // 11 gennaio 2027 — applicazione EBA GL/2025/01 (banche SNCI). NON è scadenza clienti.
-  TERMINE_BANCA: new Date(2026, 8, 30),    // 30 settembre 2026 — termine fissato dalla banca, configurabile
-  TERMINE_BANCA_TXT: "30 settembre 2026",
+  TERMINE_BANCA: new Date(2026, 11, 31),   // 31 dicembre 2026 — termine fissato dalla banca, configurabile (prima dell'applicazione EBA dell'11/01/2027)
+  TERMINE_BANCA_TXT: "31 dicembre 2026",
   // Listino N2O S.r.l. "PER AZIENDE" (documento del 25/08/2026, trasmesso da Luca Marchetti il 02/10/2026 — oggetto "PREZZIARIO").
   // Prezzi IVA esclusa. Pagamento unico annuale (pari a 10 mensilità) oppure 12 rate mensili (impegno annuale).
   // Il listino indica, per ogni piano, prezzo e crediti AI inclusi: altre differenze fra i piani vanno confermate con N2O.
@@ -399,7 +399,7 @@ const CONFIG = {
   PROTOCOLLO: "AUR-2026-004217",
 
   // [PLACEHOLDER CLAUSOLE AVVOCATO — incl. disdetta piano mensile, in arrivo dal legale di Luca]
-  CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 30 settembre 2026. Il servizio è erogato da N2O S.r.l. in collaborazione con la Banca, con pagamento in unica soluzione annuale oppure in 12 rate mensili. Il pagamento rateale costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
+  CLAUSOLE: "Ai sensi degli orientamenti EBA GL/2025/01, applicabili alla Banca dall'11 gennaio 2027, e del D.Lgs. 208/2025, la Banca integra la valutazione del merito creditizio con informazioni di carattere sociale e di governance. A tal fine è richiesta la compilazione di un'autodichiarazione relativa agli adempimenti in materia di salute e sicurezza sul lavoro (D.Lgs. 81/08), entro il 31 dicembre 2026. Il servizio è erogato da N2O S.r.l. in collaborazione con la Banca, con pagamento in unica soluzione annuale oppure in 12 rate mensili. Il pagamento rateale costituisce rateizzazione di un impegno di durata annuale. La completezza delle informazioni contribuisce alla valutazione del profilo creditizio.",
 
   // [Questionario ESG-Social — contenuto definitivo fornito dalla banca]
   // A1 "Ragione sociale" è raccolta nella pagina Dati di fatturazione e mostrata in intestazione: non si ripete qui.
@@ -978,7 +978,7 @@ const SCHERMATE = [
       </div>
       <div class="db-griglia">
         <div class="pannello">
-          <h3>Raccolta autodichiarazioni nel tempo <small>ultimi 9 mesi · linea tratteggiata: proiezione fino al termine del 30/09 (≈96% di copertura)</small></h3>
+          <h3>Raccolta autodichiarazioni nel tempo <small>ultimi 9 mesi · linea tratteggiata: proiezione fino al termine del 31/12 (≈96% di copertura)</small></h3>
           <svg class="area-svg" viewBox="0 0 600 150" preserveAspectRatio="none">
             <defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A7F4E" stop-opacity=".55"/><stop offset="100%" stop-color="#1A7F4E" stop-opacity=".05"/></linearGradient></defs>
             <path d="M0,142 C55,138 95,128 140,118 C195,105 235,92 285,76 C340,60 390,48 440,36 L440,150 L0,150 Z" fill="url(#gr)"/>
@@ -986,7 +986,7 @@ const SCHERMATE = [
             <path d="M440,36 C495,24 555,12 600,6" fill="none" stroke="#7FD7A8" stroke-width="2.5" stroke-dasharray="7 6"/>
             <line x1="440" y1="20" x2="440" y2="150" stroke="#2A4A6E" stroke-width="1" stroke-dasharray="3 4"/>
           </svg>
-          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#8FA8C2"><span>9 mesi fa</span><span>6 mesi fa</span><span>3 mesi fa</span><span style="color:#B9D2EA;font-weight:700">oggi</span><span style="color:#7FD7A8">termine 30/09</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#8FA8C2"><span>9 mesi fa</span><span>6 mesi fa</span><span>3 mesi fa</span><span style="color:#B9D2EA;font-weight:700">oggi</span><span style="color:#7FD7A8">termine 31/12</span></div>
         </div>
         <div class="pannello">
           <h3>Stato del portafoglio <small>${fmt(CONFIG.N_CORPORATE)} clienti corporate</small></h3>
@@ -1056,9 +1056,9 @@ const SCHERMATE = [
     <div class="drawer">
       <div class="drawer-head"><b>Solleciti automatici</b><button class="drawer-x" aria-label="Chiudi pannello" onclick="stato.pannelloSoll=null;render()">✕</button></div>
       <div class="drawer-cliente">${stato.pannelloSoll}</div>
-      <div class="drawer-riga"><span class="dr-t fatto">T−90</span><div><b>PEC di promemoria</b><br>inviata · 02/04/2026</div></div>
-      <div class="drawer-riga"><span class="dr-t fatto">T−60</span><div><b>PEC + email al referente</b><br>inviata · 02/05/2026</div></div>
-      <div class="drawer-riga"><span class="dr-t ora">T−30</span><div><b>Lista per la filiale</b><br>programmata · 31/08/2026</div></div>
+      <div class="drawer-riga"><span class="dr-t fatto">T−90</span><div><b>PEC di promemoria</b><br>inviata · 02/10/2026</div></div>
+      <div class="drawer-riga"><span class="dr-t ora">T−60</span><div><b>PEC + email al referente</b><br>programmata · 01/11/2026</div></div>
+      <div class="drawer-riga"><span class="dr-t">T−30</span><div><b>Lista per la filiale</b><br>programmata · 01/12/2026</div></div>
       <div class="drawer-riga"><span class="dr-t">T−7</span><div><b>Escalation al gestore</b><br>se non completata</div></div>
       <div class="drawer-nota">Cadenza configurabile per banca. Il sollecito lo gestisce il sistema, non la filiale.</div>
     </div>` : ""}
